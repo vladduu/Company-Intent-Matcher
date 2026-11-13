@@ -9,7 +9,7 @@ Dataset inspection, loading, and normalization are available. The qualification 
 ## Project structure
 
 - `solution.py`: entry point for the solution.
-- `data_loader.py`: dataset loading and field normalization.
+- `data_loader.py`: dataset loading, exact deduplication, and field normalization.
 - `WRITEUP.md`: approach, tradeoffs, evaluation, and limitations.
 - `requirements.txt`: Python dependencies.
 - `data/`: local dataset and data instructions.
@@ -37,7 +37,7 @@ From the project root, run:
 python solution.py
 ```
 
-This currently loads all records, including duplicates, and prints their count.
+This currently loads the data, removes exact duplicate records, and prints the remaining count.
 It does not perform matching yet. The loader converts `address`
 and `primary_naics` into dictionaries and leaves the original file unchanged.
 It uses only the Python standard library.

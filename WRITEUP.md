@@ -7,8 +7,9 @@ The first implemented step is loading and normalizing the dataset.
 The loader tries JSON parsing for strings, then `ast.literal_eval` for Python
 literal syntax. It does not use `eval`.
 
-All records are kept in their original order, including exact duplicates.
-Duplicate removal will be implemented separately.
+Exact duplicates are detected before normalization by comparing all original
+fields with sorted dictionary keys. The first occurrence is kept, and companies
+are not merged by name. Original record order is preserved.
 
 Null values stay `None`; missing `address` or `primary_naics` fields become `None`.
 Other fields are preserved as supplied, without filling in unknown values.

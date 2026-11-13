@@ -33,8 +33,9 @@ def normalize_company(company):
 
 
 def load_companies(dataset_path=DEFAULT_DATASET_PATH):
-    """Read every JSONL record and normalize its fields."""
+    """Read JSONL, remove exact duplicate records, and normalize their fields."""
     companies = []
+    seen = set()
 
     with Path(dataset_path).open(encoding="utf-8") as dataset:
         for line_number, line in enumerate(dataset, start=1):
@@ -46,7 +47,13 @@ def load_companies(dataset_path=DEFAULT_DATASET_PATH):
                 if not isinstance(company, dict):
                     raise ValueError("Each record must be a JSON object")
 
+                # Compare original records before normalization; keep the first copy.
+                record_key = json.dumps(company, sort_keys=True)
+                if record_key in seen:
+                    continue
+
                 companies.append(normalize_company(company))
+                seen.add(record_key)
             except ValueError as error:
                 raise ValueError(f"Line {line_number}: {error}") from error
 
