@@ -4,12 +4,14 @@ A project for the Veridion Intent Qualification challenge: ranking and qualifyin
 
 ## Status
 
-Dataset inspection, loading, and normalization are available. The qualification pipeline is not implemented yet.
+Dataset inspection, normalization, deduplication, and basic keyword search are available.
+Semantic matching and constraint qualification are not implemented yet.
 
 ## Project structure
 
 - `solution.py`: entry point for the solution.
 - `data_loader.py`: dataset loading, exact deduplication, and field normalization.
+- `keyword_search.py`: company text preparation and keyword ranking.
 - `WRITEUP.md`: approach, tradeoffs, evaluation, and limitations.
 - `requirements.txt`: Python dependencies.
 - `data/`: local dataset and data instructions.
@@ -38,6 +40,22 @@ python solution.py
 ```
 
 This currently loads the data, removes exact duplicate records, and prints the remaining count.
-It does not perform matching yet. The loader converts `address`
+Without a query, it only loads the data. The loader converts `address`
 and `primary_naics` into dictionaries and leaves the original file unchanged.
 It uses only the Python standard library.
+
+## Search companies
+
+```bash
+python solution.py --query "logistics" --top 10
+python solution.py --query "software development" --top 5
+```
+
+`--top` must be positive and defaults to 10. Search uses the description,
+core offerings, and business model. Results show the name, score, and matched words.
+The score counts distinct query words found, ignoring case and punctuation.
+Records with no matching words are excluded; ties keep dataset order.
+This is a keyword baseline, not a probability or a qualification decision.
+It does not understand synonyms, phrases, negation, location requirements, or
+numeric constraints. Common words are not filtered out, so short keyword queries
+are more useful than full sentences at this stage.
