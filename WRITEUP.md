@@ -29,9 +29,26 @@ distinguish an offered service from a passing mention of an industry.
 
 ## Evaluation
 
-Retrieval quality has not yet been measured on a labeled evaluation set.
+A first development evaluation covers three exact challenge examples and their
+top 10 keyword results, plus one additional relevant candidate per query.
+The 33 labels are assistant-proposed, based on supplied profile evidence, and
+pending human review. They are not independent ground truth or a held-out test.
+
+Run `python evaluate.py`. See `evaluation/README.md` for judgment rules and
+`evaluation/development_cases.json` for evidence, reasons, and record identifiers.
+Confirmed relevant results in the top 10 are 0 for Romanian logistics, 0 for
+public software companies with >1000 employees, and 6 for cosmetics packaging.
+There are respectively 3, 0, and 1 uncertain judgments; confirmed-relevant@10
+is a lower bound where uncertainty remains. Dataset-wide recall is not measured.
+The keyword algorithm was left unchanged to preserve this baseline.
 
 ## Error Analysis
+
+The exact query `Logistic companies in Romania` also exposes a word-inflection
+failure (`logistic` versus `logistics`) and matches on common words such as `in`.
+For the public software query, all top 10 profiles have `is_public=false`.
+For cosmetics packaging, Rantum Capital and BrandSafway appear despite unrelated
+business roles. These results motivate explicit constraints and role qualification.
 
 In a manual check of `logistics`, CBRE Romania is returned because its profile
 mentions logistics as a client sector/property type. The description identifies

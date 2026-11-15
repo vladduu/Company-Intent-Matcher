@@ -1,0 +1,71 @@
+# Development evaluation
+
+Run from the project root:
+
+```bash
+python evaluate.py
+```
+
+`development_cases.json` contains the three exact example queries, 30 judgments
+for the keyword baseline's top 10 results, and three additional relevant candidates
+outside those results. Labels were proposed by the assistant from the supplied
+profiles and are pending human review, not independent ground truth. Review the
+evidence and reason for each case before using the numbers as final quality claims.
+Set `review_status` to `reviewed_by_user` only after actually reviewing a case.
+
+## Judgment rules
+
+- `relevant`: the supplied evidence supports all required conditions.
+- `not_relevant`: a required field contradicts the query or the described business
+  clearly has a different role. This is a profile-based judgment, not a claim
+  about all possible real-world activities of the company.
+- `insufficient_information`: a necessary fact or role is ambiguous or unavailable.
+
+For q1, Romania means the primary country is `ro`. Logistics includes external
+freight, delivery, forwarding and warehousing services. Selling trucks, logistics
+software or equipment, and transporting one's own traded products do not alone qualify.
+Ambiguous warehouse/logistics offerings remain uncertain.
+
+For q2, software products and software development services are in scope;
+`is_public` must be true and `employee_count` strictly greater than 1000.
+A known contradiction is sufficient for rejection even if another field is missing.
+Use supplied values, without replacing them with outside knowledge.
+
+For q3, both primary cosmetic containers and protective shipping packaging count.
+A supplier does not itself need a direct-to-consumer business model: that describes
+the buyer. Explicit cosmetics/personal-care applications establish potential fit;
+no claim is made about minimum order size, price or regulatory suitability.
+
+## Baseline snapshot
+
+| Query | Relevant | Not relevant | Insufficient information | Confirmed relevant / 10 |
+|---|---:|---:|---:|---:|
+| q1: Romanian logistics | 0 | 7 | 3 | 0.00 |
+| q2: Public software, >1000 employees | 0 | 10 | 0 | 0.00 |
+| q3: Cosmetics packaging suppliers | 6 | 3 | 1 | 0.60 |
+
+These are provisional development results. Where cases are uncertain, the last
+column is a lower bound, not a definitive precision estimate. The evaluator reports
+new, unlabeled results as `unjudged`, never silently treating them as negatives.
+Before comparing another model, judge its new results using the same rules.
+
+## Observed failures
+
+- q1: all top 10 score 2, often from `in` and `romania`, or `companies` and `in`.
+  `Logistic` does not match `logistics`. Colaska (US) and Rantum Capital (Germany)
+  are returned because no country filter is applied. CBRE serves the logistics
+  real estate market, which does not establish logistics operations.
+- q2: all top 10 have `is_public=false`. The ranker ignores this field and the
+  employee constraint. Mentions of public clients or clients' employees can mislead it.
+- q3: Flextribe supplies relevant packaging, but Rantum Capital and BrandSafway
+  also rank highly due to common words and unrelated supply/consumer terminology.
+
+Poșta Română, Globant, and BAOLILONG GLASS PACKAGING are additional relevant
+examples outside the respective top 10. Their presence demonstrates missed results,
+but three selected examples do not establish dataset-wide recall. No exhaustive
+labeling, held-out evaluation, latency benchmark or model comparison has been done.
+
+Records are identified by a SHA-256 of the full normalized profile, not by name:
+two different Rompetrol or Sesame HR records must not share a label accidentally.
+The original dataset hash is checked before evaluation. The ranking algorithm was
+not modified during this evaluation. Keep a separate held-out set for final testing.

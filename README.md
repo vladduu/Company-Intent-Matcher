@@ -12,6 +12,8 @@ Semantic matching and constraint qualification are not implemented yet.
 - `solution.py`: entry point for the solution.
 - `data_loader.py`: dataset loading, exact deduplication, and field normalization.
 - `keyword_search.py`: company text preparation and keyword ranking.
+- `evaluate.py`: repeat the initial development evaluation.
+- `evaluation/`: proposed labels, evidence, judgment rules, and baseline results.
 - `WRITEUP.md`: approach, tradeoffs, evaluation, and limitations.
 - `requirements.txt`: Python dependencies.
 - `data/`: local dataset and data instructions.
