@@ -20,6 +20,18 @@ This step does not validate every nested field or standardize country codes.
 
 ## Tradeoffs
 
+An optional `filters` method applies a bounded English rule parser, followed by
+three-state structured checks and keyword ranking of residual text. Supported
+fields are primary country, public status, and employee count. Filters apply
+before top-result truncation. Missing or invalid field values are unknown;
+known contradictions exclude a candidate even when another condition is unknown.
+Unknown candidates remain in a separate result group. Passing these checks is
+not a full relevance decision. No external models or API calls are used yet.
+
+The parser is intentionally limited to documented patterns. It defers some
+negated/relational requests and retains residual text, but cannot guarantee that
+every unsupported condition is detected. Incorrect extraction remains a risk.
+
 The keyword baseline combines description, core offerings, and business model.
 It splits text into lowercase alphanumeric words and scores a company by the
 number of distinct query words present. Repetition does not increase the score.
@@ -43,6 +55,15 @@ is a lower bound where uncertainty remains. Dataset-wide recall is not measured.
 The keyword algorithm was left unchanged to preserve this baseline.
 
 ## Error Analysis
+
+After adding filters, the exact q1 query returns no passing keyword candidates:
+26 profiles pass the country check, but residual `logistic` does not match
+`logistics`. This is not evidence that there are no Romanian logistics providers.
+For q2, 36 profiles pass public/employee checks; every returned candidate meets
+these structured conditions, but its software role still needs review. Of the
+top 10, only Globant has an existing relevant judgment; the other nine are
+unjudged, so a quality improvement cannot yet be quantified from those labels.
+The original keyword baseline and evaluation labels remain unchanged.
 
 The exact query `Logistic companies in Romania` also exposes a word-inflection
 failure (`logistic` versus `logistics`) and matches on common words such as `in`.

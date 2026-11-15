@@ -1,6 +1,7 @@
 """Repeat the keyword baseline evaluation using explicitly labeled profiles."""
 
 import hashlib
+import argparse
 import json
 import sys
 from collections import Counter
@@ -8,6 +9,7 @@ from pathlib import Path
 
 from data_loader import DEFAULT_DATASET_PATH, load_companies
 from keyword_search import search_companies
+from filtered_search import search_with_filters
 
 
 def company_id(company):
@@ -17,6 +19,9 @@ def company_id(company):
 
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
+    parser = argparse.ArgumentParser(description="Evaluate one search method on development queries")
+    parser.add_argument("--method", choices=("keyword", "filters"), default="keyword")
+    args = parser.parse_args()
     path = Path(__file__).resolve().parent / "evaluation" / "development_cases.json"
     evaluation = json.loads(path.read_text(encoding="utf-8"))
     digest = hashlib.sha256(DEFAULT_DATASET_PATH.read_bytes()).hexdigest()
@@ -36,7 +41,12 @@ def main():
     print("Development evaluation: assistant-proposed labels, pending human review.")
     print("Confirmed relevant / 10 is a lower bound when judgments are uncertain or missing.")
     for query in evaluation["queries"]:
-        results = search_companies(companies, query["text"], top=10)
+        if args.method == "filters":
+            output = search_with_filters(companies, query["text"], top=10)
+            results = output["results"]
+            print(f"\nStructured filter counts: {output['counts']}; unknown candidates excluded from passing list")
+        else:
+            results = search_companies(companies, query["text"], top=10)
         counts = Counter(labels.get((query["id"], company_id(r["company"])), "unjudged") for r in results)
         print(f"\n{query['id']}: {query['text']}")
         print(f"Returned: {len(results)}; relevant: {counts['relevant']}; "
