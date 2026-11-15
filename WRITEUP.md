@@ -56,9 +56,17 @@ The keyword algorithm was left unchanged to preserve this baseline.
 
 ## Error Analysis
 
-After adding filters, the exact q1 query returns no passing keyword candidates:
-26 profiles pass the country check, but residual `logistic` does not match
-`logistics`. This is not evidence that there are no Romanian logistics providers.
+Initially, filters alone returned no candidates for q1 because `logistic` did
+not match `logistics`, even though 26 profiles passed the country check.
+The filtered method now applies a small explicit variant map to both query and
+profile words. It returns 10 candidates for q1, including Poșta Română (labeled
+relevant), but also Rompetrol and CBRE (labeled not relevant). Five results are
+unjudged and two uncertain. This fixes the lexical mismatch, not role qualification.
+The map also covers selected singular/plural pairs such as supplier/suppliers
+and battery/batteries. It does not remove suffixes indiscriminately, recognize
+arbitrary synonyms, or double-count variants of one term. The keyword baseline
+retains exact matching. In q3, Minh Trang Packaging is a new unjudged result;
+six results retain relevant labels, two not-relevant and one uncertain.
 For q2, 36 profiles pass public/employee checks; every returned candidate meets
 these structured conditions, but its software role still needs review. Of the
 top 10, only Globant has an existing relevant judgment; the other nine are

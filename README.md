@@ -66,6 +66,15 @@ It does not understand synonyms, phrases, negation, location requirements, or
 numeric constraints. Common words are not filtered out, so short keyword queries
 are more useful than full sentences at this stage.
 
+For `--method filters`, a small explicit word-variant map additionally normalizes
+both the residual query and profile text: for example `logistic`/`logistics`,
+`supplier`/`suppliers`, `cosmetic`/`cosmetics`, and `battery`/`batteries`.
+See `WORD_VARIANTS` in `keyword_search.py` for the complete supported list.
+Matched words display the normalized terms, which may differ from the original
+spelling. Multiple variants of the same term contribute only one score point.
+This is not general stemming or semantic understanding. The default `keyword`
+method continues to use exact words for baseline comparisons.
+
 ## Try structured filters
 
 ```bash

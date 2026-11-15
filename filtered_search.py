@@ -16,7 +16,7 @@ def search_with_filters(companies, query, top=10):
 
     def rank(group):
         if tokenize(parsed["activity"]):
-            results = search_companies(group, parsed["activity"], top)
+            results = search_companies(group, parsed["activity"], top, normalize_variants=True)
         else:
             results = [{"company": c, "score": 0, "matched_words": []} for c in group[:top]]
         for result in results:
