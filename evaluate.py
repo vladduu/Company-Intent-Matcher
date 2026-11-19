@@ -20,7 +20,7 @@ def company_id(company):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Evaluate one search method on development queries")
-    parser.add_argument("--method", choices=("keyword", "filters"), default="keyword")
+    parser.add_argument("--method", choices=("keyword", "filters", "semantic", "hybrid"), default="keyword")
     args = parser.parse_args()
     path = Path(__file__).resolve().parent / "evaluation" / "development_cases.json"
     evaluation = json.loads(path.read_text(encoding="utf-8"))
@@ -29,6 +29,13 @@ def main():
         raise ValueError("Dataset changed; review the evaluation cases before comparing results.")
 
     companies = load_companies()
+    engine = None
+    if args.method in ("semantic", "hybrid"):
+        from semantic_search import SemanticSearch
+        try:
+            engine = SemanticSearch(companies)
+        except (RuntimeError, OSError, ValueError) as error:
+            parser.exit(1, f"Semantic search error: {error}\n")
     labels = {}
     valid_labels = {"relevant", "not_relevant", "insufficient_information"}
     known_ids = {company_id(company) for company in companies}
@@ -41,8 +48,9 @@ def main():
     print("Development evaluation: assistant-proposed labels, pending human review.")
     print("Confirmed relevant / 10 is a lower bound when judgments are uncertain or missing.")
     for query in evaluation["queries"]:
-        if args.method == "filters":
-            output = search_with_filters(companies, query["text"], top=10)
+        if args.method != "keyword":
+            output = (engine.search(query["text"], top=10, hybrid=args.method == "hybrid")
+                      if engine is not None else search_with_filters(companies, query["text"], top=10))
             results = output["results"]
             print(f"\nStructured filter counts: {output['counts']}; unknown candidates excluded from passing list")
         else:

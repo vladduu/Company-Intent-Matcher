@@ -12,10 +12,10 @@ from filtered_search import search_with_filters
 def main():
     # Preserve company names with diacritics when output is redirected on Windows.
     sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="Search company profiles by keyword.")
-    parser.add_argument("--query", help="Words to search for in company profiles")
+    parser = argparse.ArgumentParser(description="Rank company profiles using keyword or semantic retrieval.")
+    parser.add_argument("--query", help="Company search request")
     parser.add_argument("--top", type=int, default=10, help="Maximum results (default: 10)")
-    parser.add_argument("--method", choices=("keyword", "filters"), default="keyword")
+    parser.add_argument("--method", choices=("keyword", "filters", "semantic", "hybrid"), default="keyword")
     args = parser.parse_args()
     if args.top < 1:
         parser.error("--top must be a positive integer")
@@ -27,8 +27,17 @@ def main():
     if args.query is None:
         return
 
-    if args.method == "filters":
-        output = search_with_filters(companies, args.query, args.top)
+    if args.method != "keyword":
+        if args.method == "filters":
+            output = search_with_filters(companies, args.query, args.top)
+        else:
+            from semantic_search import SemanticSearch
+            try:
+                engine = SemanticSearch(companies)
+                output = engine.search(args.query, args.top, hybrid=args.method == "hybrid")
+            except (RuntimeError, OSError, ValueError) as error:
+                parser.exit(1, f"Semantic search error: {error}\n")
+            print(f"Profile embedding cache reused: {engine.cache_hit}")
         print("Parsed query:")
         print(json.dumps(output["parsed_query"], indent=2, ensure_ascii=False))
         print(f"Structured filter counts: {output['counts']}")
@@ -44,14 +53,19 @@ def main():
 
 def show_results(results):
     if not results:
-        print("No keyword matches found.")
+        print("No candidates returned.")
         return
 
-    print("\nKeyword results (score = number of distinct query words found):")
+    semantic = results[0].get("score_type") == "cosine_similarity"
+    print("\nSemantic candidates (cosine similarity, not probability):" if semantic else
+          "\nKeyword results (score = number of distinct query words found):")
     for rank, result in enumerate(results, start=1):
         name = result["company"].get("operational_name") or "Unnamed company"
-        words = ", ".join(result["matched_words"])
-        print(f"{rank}. {name} | Score: {result['score']} | Matched words: {words}")
+        if semantic:
+            print(f"{rank}. {name} | Similarity: {result['score']:.4f}")
+        else:
+            words = ", ".join(result["matched_words"])
+            print(f"{rank}. {name} | Score: {result['score']} | Matched words: {words}")
 
 
 if __name__ == "__main__":

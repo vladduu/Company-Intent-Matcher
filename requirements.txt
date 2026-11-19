@@ -1,1 +1,4 @@
-# Add dependencies as they are introduced.
+# Only needed for semantic/hybrid search; keyword/filters use the standard library.
+sentence-transformers>=3.0,<6
+# Required when model downloads use a SOCKS proxy.
+socksio>=1.0,<2

@@ -26,7 +26,7 @@ fields are primary country, public status, and employee count. Filters apply
 before top-result truncation. Missing or invalid field values are unknown;
 known contradictions exclude a candidate even when another condition is unknown.
 Unknown candidates remain in a separate result group. Passing these checks is
-not a full relevance decision. No external models or API calls are used yet.
+not a full relevance decision. The rule-based methods require no external models or API calls.
 
 The parser is intentionally limited to documented patterns. It defers some
 negated/relational requests and retains residual text, but cannot guarantee that
@@ -95,3 +95,34 @@ negation, or structured constraints such as country and employee count.
 Common query words are not removed. Single-word queries give every matching
 company the same score, so their order is not a semantic relevance ranking.
 No keyword matches means no lexical overlap, not proof that no company qualifies.
+
+
+## Local embedding retrieval
+
+Added `semantic` (full-query similarity baseline) and `hybrid` (existing hard
+filters plus residual-text similarity). The local all-MiniLM-L6-v2 encoder produces
+normalized vectors; their dot product is cosine similarity. Core offerings precede
+description, business model and target markets in profile text. Model truncation
+may omit later evidence. An embedding score is not a qualification verdict.
+
+The index is cached by ordered texts and encoder configuration/revision. It is
+reused across queries; changing its identity rebuilds the full index. The first
+implementation uses Python vectors and a linear scan, appropriate to 457 profiles.
+At 100,000 profiles, use compact float32 arrays, vectorized scoring or an ANN index,
+filter-aware retrieval, and per-record incremental embedding updates. Benchmark
+retrieval recall before adopting approximate search. Cold model startup and index
+creation must be measured separately from warm query latency.
+
+Automated tests use an injected deterministic test encoder to verify cache reuse,
+cache invalidation, corruption recovery, ranking and filter/unknown separation.
+Those tests verify software behavior, not model quality. Semantic accuracy must be
+measured with the real model and reviewed labels; no automatic relabeling is done.
+
+
+Validation status for this implementation: 22 automated tests passed, including
+six tests using a deterministic fake encoder. The real embedding model has not
+been run here. Dependency installation into the user Python directory failed
+with Windows access denied; a temporary-target installation stopped reporting
+progress and was interrupted. Therefore no semantic quality or latency results
+are claimed yet. Complete installation and run both semantic and hybrid evaluation
+before drawing conclusions or treating this as a validated submission.

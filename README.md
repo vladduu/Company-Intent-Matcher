@@ -5,14 +5,15 @@ A project for the Veridion Intent Qualification challenge: ranking and qualifyin
 ## Status
 
 Dataset inspection, normalization, deduplication, and basic keyword search are available.
-An optional rule parser and structured filters are available. Semantic matching
-and full intent qualification are not implemented yet.
+An optional rule parser, structured filters, and local embedding retrieval are
+available. Full business-role qualification is not implemented yet.
 
 ## Project structure
 
 - `solution.py`: entry point for the solution.
 - `data_loader.py`: dataset loading, exact deduplication, and field normalization.
 - `keyword_search.py`: company text preparation and keyword ranking.
+- `semantic_search.py`: local embeddings, profile cache, and semantic/hybrid retrieval.
 - `query_parser.py`: limited English query rules.
 - `filters.py`: three-state checks for structured conditions.
 - `filtered_search.py`: filters followed by keyword ranking.
@@ -104,3 +105,42 @@ it is not guaranteed to be a correctly extracted activity. Unsupported constrain
 can still be missed by these limited rules. Revenue, founding year, region groups,
 synonyms and complex intent remain future work. No LLM calls or new dependencies
 are required. The parsed query is kept in memory, not saved automatically.
+
+
+## Semantic and hybrid search
+
+Install dependencies with your normal Python installation:
+
+```bash
+python -m pip install -r requirements.txt
+python solution.py --method semantic --query "Logistic companies in Romania" --top 10
+python solution.py --method hybrid --query "Logistic companies in Romania" --top 10
+python evaluate.py --method semantic
+python evaluate.py --method hybrid
+```
+
+`semantic` embeds the complete query without hard filters. `hybrid` uses the
+existing rule parser, applies its structured filters, and ranks candidates by
+similarity to the residual activity text. Unknown filter conditions remain separate.
+The default remains `keyword`. New candidates remain `unjudged` in evaluation
+until their labels are reviewed; existing labels are not automatically changed.
+
+The first semantic run downloads `sentence-transformers/all-MiniLM-L6-v2`.
+Encoding runs locally on CPU, with no API key or per-query API calls. Network
+access is needed for installation and initial model download. The model cache
+and profile embeddings live under `.cache/semantic/`, already excluded from Git.
+The profile cache key includes ordered input texts, encoder identity/revision,
+library version and sequence limit. A changed key rebuilds all profile embeddings
+in this first version. Corrupt cache data is rebuilt. Queries are encoded per call.
+
+Profiles contain labeled core offerings, description, business model and target
+markets. Core offerings come first; long profiles can be truncated at the model's
+sequence limit (normally 256 word pieces). This can lose important evidence.
+Scores are cosine similarity, not probabilities. No relevance threshold has been
+calibrated: the method returns up to `--top` candidates, even when all are weak.
+Passing filters and high similarity do not confirm the requested business role.
+The parser still has its documented limitations. Revenue, year and regional
+constraints are not magically handled by adding embeddings.
+
+Model documentation: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+Semantic search documentation: https://www.sbert.net/examples/sentence_transformer/applications/semantic-search/README.html
