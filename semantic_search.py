@@ -13,7 +13,12 @@ MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 CACHE_DIR = Path(__file__).resolve().parent / ".cache" / "semantic"
 
 
-def profile_text(company):
+def profile_text(company, mode="full"):
+    if mode == "description":
+        value = company.get("description")
+        return value.strip() if isinstance(value, str) else ""
+    if mode != "full":
+        raise ValueError("Profile mode must be full or description")
     parts = []
     for field in ("core_offerings", "description", "business_model", "target_markets"):
         value = company.get(field)
@@ -60,13 +65,16 @@ class LocalEncoder:
 
 
 class SemanticSearch:
-    def __init__(self, companies, encoder=None, cache_dir=CACHE_DIR):
+    def __init__(self, companies, encoder=None, cache_dir=CACHE_DIR, profile_mode="full"):
+        if profile_mode not in ("full", "description"):
+            raise ValueError("Profile mode must be full or description")
         self.companies = companies
         self.encoder = encoder if encoder is not None else LocalEncoder()
-        self.texts = [profile_text(company) for company in companies]
+        self.texts = [profile_text(company, profile_mode) for company in companies]
         self.indices = [i for i, text in enumerate(self.texts) if text]
         texts = [self.texts[i] for i in self.indices]
-        identity = {"encoder": self.encoder.identity, "text_format": 1, "texts": texts}
+        identity = {"encoder": self.encoder.identity, "text_format": 2,
+                    "profile_mode": profile_mode, "texts": texts}
         key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode("utf-8")).hexdigest()
         cache_path = Path(cache_dir) / f"{key}.json"
         self.cache_hit = False

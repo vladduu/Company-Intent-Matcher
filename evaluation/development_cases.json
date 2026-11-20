@@ -1266,6 +1266,1255 @@
           "Cosmetic Glass Cap Manufacturing"
         ]
       }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "d03ea3bbbc8ad76db2edfd2de15f7d9d3114798ef0f6c04bf5968a1cbdf2c19b",
+      "company_name": "Unilever",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.4761769,
+          "longitude": 26.106227965375094,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Unilever South Central Europe SA, DBA Unilever, is a Romanian company specialized in the distribution and retail of consumer goods, with a focus on personal care and household products. The company serves the Romanian market and is part of the Unilever Group, which operates globally. Unilever România also engages in digital initiatives, including platforms for suppliers and customers, and is committed to sustainability and social responsibility.",
+        "core_offerings": [
+          "Consumer Goods Distribution and Retail",
+          "Ingredient Information and Allergy Support Services",
+          "Digital Customer Platform Services",
+          "Digital Supplier Platform Services",
+          "Household Products Distribution and Retail",
+          "Consumer Goods Research and Development",
+          "Sustainable Product Development",
+          "Personal Care Products Distribution and Retail"
+        ],
+        "primary_naics": {
+          "code": "424690",
+          "label": "Other Chemical and Allied Products Merchant Wholesalers"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "78638230f4cbaa290cfd80f718d6d7ecdcf8ca9202a51729b4a16c080a1ebc62",
+      "company_name": "TIMAC AGRO",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.4792186,
+          "longitude": 26.1045773,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": 65.0,
+        "is_public": false,
+        "description": "TIMAC AGRO S.R.L. is a French agricultural company engaged in the development, production, and distribution of plant nutrition, animal nutrition, and biostimulation solutions for farmers and agricultural producers. The company operates globally, with a presence in Europe, America, Asia, and Africa, and collaborates with scientific institutes and universities to advance its research and development activities. TIMAC AGRO also engages in sustainable agriculture practices and environmental responsibility.",
+        "core_offerings": [
+          "Agricultural Product Retail",
+          "Fertilizer Manufacturing",
+          "Sustainable Agriculture Solution Development",
+          "Soil Conditioner Manufacturing",
+          "Plant Nutrition Product Manufacturing",
+          "Biostimulant Manufacturing",
+          "Agricultural Product Manufacturing",
+          "Animal Production Solution Manufacturing",
+          "Agricultural Product Wholesale",
+          "Agricultural Research and Development",
+          "Agricultural Product Exporting",
+          "Agricultural Product Innovation Services",
+          "Agricultural Consulting Services",
+          "Animal Nutrition Product Manufacturing",
+          "Agricultural Product Distribution",
+          "Agricultural Product Supply Chain Management"
+        ],
+        "primary_naics": {
+          "code": "325311",
+          "label": "Nitrogenous Fertilizer Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "fac40780ff3dc13a0c4a256711d40f606074184b2f9e85de7ec7b0421f2be3eb",
+      "company_name": "OMV",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.490331,
+          "longitude": 26.0556503,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "OMV PETROM Marketing SRL is a Romanian company engaged in the natural gas and oil industry, operating in the Exploration & Production, Refining & Marketing, and Chemicals sectors. The company provides products and services such as gasoline, diesel, aviation fuel, bitumen, and chemical products, and manages fuel stations and gas storage facilities across multiple European countries. OMV also offers e-mobility solutions and is involved in sustainability initiatives, including circular economy solutions and carbon emission reduction.",
+        "core_offerings": [
+          "Bitumen Sales",
+          "Gas Storage Facility Management",
+          "Oil and Natural Gas Marketing",
+          "Oil and Natural Gas Exploration and Production",
+          "Circular Economy Solutions Development",
+          "Marketing Campaign Execution",
+          "Gasoline and Diesel Fuel Sales",
+          "Fuel Card Services",
+          "Chemical Products Sales",
+          "Oil and Natural Gas Refining",
+          "Sustainable Energy Solutions Implementation",
+          "E-Mobility Solutions Development",
+          "Fuel Distribution and Retail",
+          "Aviation Fuel Sales",
+          "Supply Chain Logistics Services"
+        ],
+        "primary_naics": {
+          "code": "457120",
+          "label": "Other Gasoline Stations"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "7c270914ffb069b080c8ff5191ff7dc45e60ce2daa55b1d70e2a7093e35cb650",
+      "company_name": "Compania Națională de Căi Ferate CFR",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "insufficient_information",
+      "reason": "Railway infrastructure management in the description conflicts with freight operations suggested by offerings; direct freight provision is unclear.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.4493708,
+          "longitude": 26.0685182,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": 54000.0,
+        "is_public": false,
+        "description": "Compania Națională de Căi Ferate ”CFR” – SA, known as Compania Națională de Căi Ferate CFR, is a Romanian state-owned company responsible for the management and maintenance of the national railway infrastructure. The company oversees both public and private railway networks, providing access to terminals and stations, and offers services such as ticket sales and information. It also manages railway modernization and infrastructure development projects, including European Union-funded initiatives, and is involved in public procurement processes. The company is a member of international railway organizations and is certified for its operations.",
+        "core_offerings": [
+          "Scenic and Tourist Rail Transport Services",
+          "Freight Rail Transport Services",
+          "Railway Modernization Project Development",
+          "Interoperable Rail Network Enhancement",
+          "Railway Network Operation",
+          "Railway Infrastructure Management",
+          "Railway Telecommunications Services",
+          "Ticket Sales and Information Services",
+          "Railway Infrastructure Development Services",
+          "Public Procurement and Contract Management",
+          "Passenger Rail Transport Services",
+          "International Railway Cooperation and Representation",
+          "Noise Reduction and Environmental Protection Projects",
+          "Auxiliary Electric Traction Services"
+        ],
+        "primary_naics": {
+          "code": "488210",
+          "label": "Support Activities for Rail Transportation"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "8af49488cd2502bee6129fe9fe313eedee281b89e187146842764fa4065b4159",
+      "company_name": "Dacia",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.429628,
+          "longitude": 25.9901416,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": 11026.0,
+        "is_public": false,
+        "description": "Renault Commercial Roumanie S.R.L., DBA Dacia, is a Romanian automotive company engaged in the production and distribution of passenger and commercial vehicles. The company operates as a manufacturer and distributor, offering a range of vehicles and providing services such as vehicle financing, trade-in options, and maintenance contracts. Dacia also offers electric and mild hybrid vehicles, participates in government programs for environmentally friendly vehicles, and maintains a network of authorized dealers and an online platform for vehicle sales. The company is part of the Renault Commercial Group and is associated with Renault.",
+        "core_offerings": [
+          "Passenger Vehicle Manufacturing",
+          "Vehicle Accessories Retail",
+          "Mild Hybrid Vehicle Manufacturing",
+          "Vehicle Maintenance and Warranty Services",
+          "Vehicle Retail",
+          "Vehicle Distribution",
+          "Electric Vehicle Manufacturing",
+          "Vehicle Trade-In Services",
+          "Online Vehicle Retail",
+          "Vehicle Manufacturing",
+          "Commercial Vehicle Manufacturing",
+          "Vehicle Financing Services"
+        ],
+        "primary_naics": {
+          "code": "336110",
+          "label": "Automobile and Light Duty Motor Vehicle Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "22b99b9ca03ae100c4b40a855e7209b9f235b26f7f06f0bb2388051bc703800f",
+      "company_name": "Portul Constanta",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Description explicitly provides cargo handling and container/bulk port operations.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.182847100000004,
+          "longitude": 28.61768274700455,
+          "region_name": "Constanța",
+          "town": "Constanța"
+        },
+        "employee_count": 6000.0,
+        "is_public": false,
+        "description": "C.N. Administratia Porturilor Maritime S.A. Constanta, known as Portul Constanta, is a Romanian public company that operates as a maritime and river port authority, managing and overseeing the ports of Constanta, Midia, Mangalia, and Tomis. The company provides port management, cargo handling, and related services, including dry bulk, container, general cargo, liquid bulk, and roll-on/roll-off operations. It also functions as a transit hub for agricultural products and serves as a free port. The company is part of the Romanian maritime port sector and is supported by European Union funds for the naval sector.",
+        "core_offerings": [
+          "Maritime and River Port Services",
+          "Roll-On/Roll-Off Cargo Handling and Transshipment",
+          "Port Infrastructure Modernization and Enhancement",
+          "Dry Bulk Cargo Handling and Transshipment",
+          "Public Information and Transparency Reporting",
+          "Environmental Sustainability Project Implementation",
+          "Cargo Ticket Booking and Reservation Services",
+          "Transit Cargo Logistics Services",
+          "Liquid Bulk Cargo Handling and Transshipment",
+          "General Cargo Terminal Operations",
+          "Regulatory Compliance and Institutional Integrity Services",
+          "Container Terminal Operations"
+        ],
+        "primary_naics": {
+          "code": "488310",
+          "label": "Port and Harbor Operations"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "6ea2609d193254ea5666db2bcd48d0b2bd7d3133e8b29020f38b5e9449947d33",
+      "company_name": "Romgaz",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "insufficient_information",
+      "reason": "Technological transportation is mentioned within gas extraction; general freight logistics provision is unclear.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 45.7973912,
+          "longitude": 24.1519202,
+          "region_name": "Sibiu",
+          "town": "Mediaș"
+        },
+        "employee_count": 5287.0,
+        "is_public": true,
+        "description": "S.N.G.N. Romgaz S.A. is a Romanian public company engaged in the exploration, production, storage, and distribution of natural gas. The company also operates as an electricity producer and supplier, and provides technological transportation services. Romgaz is involved in geological exploration, well interventions, workovers, and special operations, and is a member of the European gas industry. The company is publicly traded on the Bucharest Stock Exchange and is majority owned by the Romanian State.",
+        "core_offerings": [
+          "Natural Gas Distribution",
+          "Technological Transportation Services",
+          "Natural Gas Exploration and Production",
+          "Geological and Petroleum Technology Services",
+          "Sustainability and Educational Program Services",
+          "Digitalization Solutions Implementation",
+          "Gas Industry Knowledge Dissemination Services",
+          "International Gas and Energy Investment",
+          "Petroleum Rights Co-Ownership and Development",
+          "Methane Gas Extraction and Processing",
+          "Electric Energy Production and Supply",
+          "Well Intervention and Workover Services",
+          "AI-Driven Gas Operations Solutions",
+          "Underground Gas Storage Services"
+        ],
+        "primary_naics": {
+          "code": "211130",
+          "label": "Natural Gas Extraction"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "f9eeac1ee5a9543b8bac8bc537fc3a2cdd626ced42998ef3091900e46accebb8",
+      "company_name": "Transgaz",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 46.1625212,
+          "longitude": 24.3473855,
+          "region_name": "Sibiu",
+          "town": "Mediaș"
+        },
+        "employee_count": 4628.0,
+        "is_public": false,
+        "description": "The National Gas Transmission Company “TRANSGAZ” S.A. is a Romanian joint-stock company engaged in the technical operation and management of the national gas transmission system. The company is responsible for the transmission and dispatching of natural gas, as well as research and design activities related to natural gas infrastructure. It also undertakes complementary functions such as purchasing gas for technological use and balancing the national gas transmission system. Transgaz is involved in international gas pipeline projects and participates in research and development initiatives. The company is publicly traded on the Bucharest Stock Exchange and is certified for sustainability and environmental management.",
+        "core_offerings": [
+          "Engineering Project Management Services",
+          "Gas Balancing and Risk Management",
+          "Gas Transmission Research and Design",
+          "Gas Dispatching Services",
+          "Gas Transmission Technology Innovation",
+          "IT Platform Development and Management",
+          "International Gas Cooperation and Cooperation",
+          "Gas Purchasing and Technological Consumption",
+          "Natural Gas Transmission Management",
+          "Renewable Energy Integration Services",
+          "Gas Pipeline Project Execution",
+          "Regulatory Compliance and Institutional Integrity Services",
+          "Gas Transmission Corridor Development",
+          "Environmental Management and Sustainability Services"
+        ],
+        "primary_naics": {
+          "code": "221210",
+          "label": "Natural Gas Distribution"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "ee1977daea836248bb620faa49b35059c52c7ee218c1c0994b623907a2c389f9",
+      "company_name": "OSCAR",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "insufficient_information",
+      "reason": "Fuel distribution and own logistics infrastructure are described; standalone external logistics services are unclear.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.4471231,
+          "longitude": 26.1093192,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": 488.0,
+        "is_public": false,
+        "description": "OSCAR DOWNSTREAM S.R.L is a Romanian private company engaged in the distribution and trading of oil and gas products, including diesel, gasoline, bitumen, and lubricants. The company operates a nationwide network of gas stations, manages in-house fuelling stations, and provides fuel card solutions for fleet and business clients. OSCAR also offers en-gross fuel solutions and manages a logistics infrastructure supported by tankers and storage facilities. The company serves sectors such as transport, agriculture, construction, and industry, and is part of the Alfa Group.",
+        "core_offerings": [
+          "Logistics and Storage Services",
+          "En-Gross Fuel Solutions",
+          "Sustainable Fuel Supply Solutions",
+          "Lubricants Distribution",
+          "Franchise Network Development",
+          "Gas Station Network Operation",
+          "In-House Fuelling Station Services",
+          "Industry-Specific Fuel Solutions",
+          "Fuel Card Management Services",
+          "Fuel Distribution and Wholesale",
+          "Personalized Fuel Consumption Optimization Services",
+          "New Fuel Type Introduction",
+          "Bitumen Distribution",
+          "Fleet Card Services"
+        ],
+        "primary_naics": {
+          "code": "424720",
+          "label": "Petroleum and Petroleum Products Merchant Wholesalers (except Bulk Stations and Terminals)"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "952d0574c75c82939dcb4a762929e3e60c79faf7d960d75192426720d5b78026",
+      "company_name": "Prutul",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "insufficient_information",
+      "reason": "Transport/storage services are mentioned within integrated agribusiness; external logistics-provider role is unclear.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.464733,
+          "longitude": 26.0918036,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": 162.0,
+        "is_public": false,
+        "description": "S.C. PRUTUL S.A., DBA Prutul, is a Romanian joint-stock company engaged in vegetable oil production, agribusiness, and the distribution of agricultural inputs. The company operates an integrated business model encompassing oilseed processing, refining, bottling, and marketing of vegetable oils, as well as the distribution of grain and the provision of transport and storage services. Prutul also exports vegetable oils and related products, including sunflower meal, sunflower husk pellets, and fatty acids, and manages a vegetable oil terminal at the Galati Commercial Harbor. The company is certified by organizations such as ISO, IFS, FSSC, FDA, Kosher, and Halal, and is affiliated with FOSFA and GAFTA.",
+        "core_offerings": [
+          "Vegetable Oil Bottling and Packaging",
+          "Rapeseed Oil Production and Refining",
+          "Sunflower Husk Pellet Production and Distribution",
+          "Vegetable Oil Production and Refining",
+          "Vegetable Oil Export and Distribution",
+          "Sunflower Meal Production and Distribution",
+          "High Oleic Sunflower Oil Production",
+          "Fatty Acid Production and Distribution",
+          "Soybean Oil Production and Refining",
+          "Sustainable Sourcing and Environmental Solutions",
+          "Grain Purchase and Storage Services",
+          "Frying Sunflower Oil Production",
+          "Sunflower Oil Production and Refining",
+          "Agricultural Input Distribution",
+          "Agricultural Transport Services"
+        ],
+        "primary_naics": {
+          "code": "311225",
+          "label": "Fats and Oils Refining and Blending"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "72f97c14fc197fd55cc6a7a156dd65d7c5c140d6280fe324fc2da6e2300f7b72",
+      "company_name": "Valtec",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.4361414,
+          "longitude": 26.1027202,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "VALTEC Premium Lubricants SRL, DBA Valtec, is a Romanian company specialized in the supply and distribution of lubricants and related products for the industrial and automotive sectors. The company serves clients across industries such as automotive, transport, construction, agriculture, building maintenance, health, and hospitality in Central and Eastern Europe. In addition to its core activities, Valtec operates as a distributor of hygiene and cleaning supplies, personal protective equipment, and safety products, and offers a private brand, Valtec Safety, for personal protective equipment. The company maintains a supply chain and logistics network to support its operations.",
+        "core_offerings": [
+          "Specialty Products Distribution",
+          "Industrial Lubricants Distribution",
+          "Tailored Industrial Solutions Services",
+          "Private Brand Personal Protective Equipment Distribution",
+          "Lubricants Distribution",
+          "Personal Protective Equipment Distribution",
+          "Hygiene and Cleaning Supplies Distribution",
+          "Auto Lubricants Distribution",
+          "Tailored Automotive Solutions Services",
+          "Safety Products Distribution"
+        ],
+        "primary_naics": {
+          "code": "424720",
+          "label": "Petroleum and Petroleum Products Merchant Wholesalers (except Bulk Stations and Terminals)"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "06f7266fc85818a0f3b11aed3c795cbbc98b9fdfb43db969f82241a967b401e8",
+      "company_name": "Valbur",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "insufficient_information",
+      "reason": "Trade facilitation and transaction services are described; logistics offerings do not establish whether it operates transport for external clients.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.1827702,
+          "longitude": 28.6495578,
+          "region_name": "Constanța",
+          "town": "Constanța"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "VALBUR TRADE & INVESTMENT Ltd., DBA Valbur, is a Romanian company specialized in facilitating global trade and investment, with a focus on the physical movement of industrial, petroleum, building materials, and beverages, as well as cereals and vegetable oils. The company operates internationally, serving clients in the industrial, petroleum, construction, and beverage sectors, and provides services such as aligning suppliers and buyers, managing transactions, and offering financial solutions.",
+        "core_offerings": [
+          "Industrial Goods Trading",
+          "Beverage and Food Products Logistics Management",
+          "Market Price Advisory Services",
+          "Global Logistics Management",
+          "Construction Materials Trading",
+          "Product Quality Compliance Services",
+          "Financial Solutions Services",
+          "Transaction Management Services",
+          "Supplier and Buyer Alignment Services",
+          "Construction Materials Logistics Management",
+          "Global Trade Facilitation",
+          "Building Materials Trading",
+          "Petroleum Products Logistics Management",
+          "Petroleum Products Trading",
+          "Industrial Goods Logistics Management",
+          "Beverage and Food Products Trading"
+        ],
+        "primary_naics": {
+          "code": "423840",
+          "label": "Industrial Supplies Merchant Wholesalers"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "8855aa5171d46795f493b273dcb759bec1e027fa8ff54626e5a085c7d33289ed",
+      "company_name": "Brasov Industrial Portfolio",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "insufficient_information",
+      "reason": "Warehousing and last-mile activity is suggested, but facility leasing dominates offerings; operating logistics versus leasing property is ambiguous.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.450243,
+          "longitude": 26.094303,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Brasov Industrial Portfolio is a Romanian company specialized in the provision of production and logistics facilities, with a focus on high-tech solutions for economic development and logistics efficiency in the Brasov region. The company serves industries such as automotive, construction, consumer goods, and e-commerce, and operates facilities that include airport logistics and smart city logistics hubs. Its operations are supported by technologies such as automatic plate scanning, automatic weigh-in stations, and RFID systems, with a primary emphasis on last-mile logistics and urban warehousing.",
+        "core_offerings": [
+          "High-Tech Logistics Facility Leasing",
+          "Consumer Goods Industry Facility Leasing",
+          "RFID System Implementation",
+          "High-Tech Production Facility Leasing",
+          "Urban Warehousing Solutions",
+          "E-commerce Logistics Solutions",
+          "Automatic Weigh-In Station Installation",
+          "Industrial Facility Leasing",
+          "Construction Industry Facility Leasing",
+          "Last-Mile Logistics Solutions",
+          "Logistics Facility Leasing",
+          "Automotive Industry Facility Leasing",
+          "Automatic Plate Scanning System Implementation",
+          "Advanced Logistics Technology Integration"
+        ],
+        "primary_naics": {
+          "code": "493110",
+          "label": "General Warehousing and Storage"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "f182b4e71cf90d353986becfbfb64997f07195576d37e4a05a9b98c46c186eba",
+      "company_name": "AQUA CENTER",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.1982888,
+          "longitude": 28.6245893,
+          "region_name": "Constanța",
+          "town": "Constanța"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "AQUA INVEST, known as AQUA CENTER, is a Romanian company engaged in the production and export of composite pipe products, including composite pipes, PVC pipes, and PVC fittings, serving the construction, water supply, and drainage sectors. The company operates a logistics and production center and exports its products to over 40 countries, with a significant market presence in China. AQUA CENTER is ISO certified and is involved in the development of Yongtong Industrial Park and the expansion of production capacity.",
+        "core_offerings": [
+          "Pipe and Fitting Exporting",
+          "Drainage Product Distribution",
+          "Composite Pipe Manufacturing",
+          "Industrial Park Development Services",
+          "Water Supply Product Distribution",
+          "PVC Pipe Manufacturing",
+          "PVC Fitting Manufacturing",
+          "Construction Material Distribution"
+        ],
+        "primary_naics": {
+          "code": "326122",
+          "label": "Plastics Pipe and Pipe Fitting Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "5fc854ca05422b236fd4627a2c3d0b8e8a233c0652fdf8f770fd82e4572e1d2d",
+      "company_name": "European Drinks",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 47.0558002,
+          "longitude": 21.9319623,
+          "region_name": "Bihor",
+          "town": "Oradea"
+        },
+        "employee_count": 4500.0,
+        "is_public": false,
+        "description": "S.C. European Drinks S.A., DBA European Drinks, is a Romanian company specialized in the production and distribution of mineral water, carbonated water, energy drinks, beer, and various soft drinks. The company operates as a holding with subsidiaries in the food and drink sector, serving both domestic and international markets. European Drinks also engages in community support initiatives and participates in international industry events.",
+        "core_offerings": [
+          "Beverage Production and Distribution",
+          "Beer Production and Distribution",
+          "International Beverage Exporting",
+          "Food Product Manufacturing",
+          "Food Product Brand Development Services",
+          "Tonic Beverage Production and Distribution",
+          "Domestic Beverage Exporting",
+          "Fruit-Based Beverage Production and Distribution",
+          "Beverage Brand Development Services",
+          "Mineral Water Production and Distribution",
+          "Carbonated Water Production and Distribution",
+          "Energy Drink Production and Distribution",
+          "Food Product Distribution",
+          "Soft Drink Production and Distribution"
+        ],
+        "primary_naics": {
+          "code": "312112",
+          "label": "Bottled Water Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "9ace4b2100843a7e92e967e9f1b7914e678ce7d439f0a40633fef5f84f28a188",
+      "company_name": "Sincron HR",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 44.4190312964,
+          "longitude": 26.0774611714,
+          "region_name": "Bucharest",
+          "town": "Bucharest"
+        },
+        "employee_count": 15.0,
+        "is_public": false,
+        "description": "HR Sincron SRL, DBA Sincron HR, is a Romanian software company specialized in providing HR software solutions, including recruitment, talent management, and HR analytics. The company offers a comprehensive platform that covers areas such as recruitment, onboarding, staffing, time and attendance, payroll, performance management, training management, employee self-service, internal communication, and HR analytics. Sincron HR serves clients across Europe and North America, supporting businesses of various sizes in streamlining HR processes and operational efficiency.",
+        "core_offerings": [
+          "HR Software User Training Services",
+          "HR Software Customization Services",
+          "HR Management Platform Solutions",
+          "Performance Management Software Development",
+          "Training Management Software Development",
+          "Talent Management Software Development",
+          "Employee Self-Service Solutions Development",
+          "Time and Attendance Management Software Development",
+          "Payroll Management Software Development",
+          "Recruitment Management Software Development",
+          "HR Software Implementation Consulting",
+          "HR Software Maintenance Services",
+          "Cloud-Based HR Platform Deployment",
+          "HR Analytics Solutions Development",
+          "HR Process Automation Solutions Development"
+        ],
+        "primary_naics": {
+          "code": "513210",
+          "label": "Software Publishers"
+        }
+      }
+    },
+    {
+      "query_id": "q1",
+      "company_id": "0e47004449dbec44148ee94ac69ca68e8363324bbfdca1a6a71fde2bdf014081",
+      "company_name": "EcoExpert Green Consulting",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "not_relevant",
+      "reason": "Description establishes a different primary activity (manufacturing, product distribution, utilities, software or consulting), without external freight/parcel/warehousing provision.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ro",
+          "latitude": 47.05878045,
+          "longitude": 21.929861,
+          "region_name": "Bihor",
+          "town": "Oradea"
+        },
+        "employee_count": 3.0,
+        "is_public": false,
+        "description": "EcoExpert Green Consulting S.R.L is a Romanian consulting company engaged in environmental, social, and governance (ESG) solutions. The company provides services such as carbon footprint calculation, sustainability reporting, and Net Zero compliance, utilizing technologies including Blockchain, AI, and sensors. EcoExpert Green Consulting serves a diverse client base, including large enterprises, start-ups, and financial institutions, and offers modular ESG solutions to support companies in achieving sustainability objectives. The company also operates a platform for ESG reporting and maintains a network of partners and clients to facilitate access to sustainability tools and resources.",
+        "core_offerings": [
+          "AI-Driven Sustainability Solutions",
+          "Sustainability Resource Optimization Consulting",
+          "Corporate Sustainability Reporting Services",
+          "Governance Impact Assessment Services",
+          "Environmental Impact Assessment Services",
+          "Carbon Footprint Calculation Services",
+          "Net Zero Compliance Consulting",
+          "Sustainability Performance Optimization Consulting",
+          "ESG Platform Solutions",
+          "Blockchain-Based Sustainability Solutions",
+          "Sustainability Cost Reduction Consulting",
+          "ESG Solutions Consulting",
+          "Social Impact Assessment Services",
+          "Sustainability Reporting Services",
+          "Customized Sustainability Strategy Development",
+          "Sensor-Based Sustainability Solutions"
+        ],
+        "primary_naics": {
+          "code": "541620",
+          "label": "Environmental Consulting Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "87ed56ba779409fcca916d98bc170ed7331231a4a7fbe225a9d0584d9e2e795f",
+      "company_name": "EPAM",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "us",
+          "latitude": 40.222923,
+          "longitude": -74.9058366,
+          "region_name": "Pennsylvania",
+          "town": "Newtown"
+        },
+        "employee_count": 62050.0,
+        "is_public": true,
+        "description": "EPAM Systems, Inc. is an American software engineering company that provides software engineering, digital platform engineering, and digital product design services. The company also offers digital transformation consulting, cloud and data analytics solutions, artificial intelligence and cybersecurity services, and digital business process outsourcing. EPAM serves clients in sectors such as consumer goods, financial services, healthcare, energy, and automotive, and operates internationally with offices in the USA, Europe, Asia, and the Middle East. The company is a member of the MACH Alliance and is publicly traded on the New York Stock Exchange.",
+        "core_offerings": [
+          "AI-Driven Solution Development",
+          "Digital Product Design Services",
+          "Experience Build Services",
+          "Digital Transformation Consulting",
+          "Data Analytics Services",
+          "Generative AI Solution Development",
+          "Digital Business Process Outsourcing",
+          "Experience Design Services",
+          "Experience Run Services",
+          "Cybersecurity Solution Development",
+          "Experience Engineering Services",
+          "Software Engineering Services",
+          "Cloud Platform Engineering",
+          "Experience Orchestration Services",
+          "Experience Testing Services"
+        ],
+        "primary_naics": {
+          "code": "541511",
+          "label": "Custom Computer Programming Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "09894a5072324142f115ebfc5c2e9fd870652a20bde109b11facb814dedcce5b",
+      "company_name": "Tata Consultancy Services",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "in",
+          "latitude": 19.03883715735294,
+          "longitude": 72.86969495367647,
+          "region_name": "Maharashtra",
+          "town": "Mumbai"
+        },
+        "employee_count": 607979.0,
+        "is_public": true,
+        "description": "Tata Consultancy Services Limited is an Indian multinational technology company that provides information technology consulting, outsourcing, and software services. The company delivers solutions in areas such as digital transformation, cloud computing, cybersecurity, and Internet of Things, and offers business solutions and specialized technologies. Tata Consultancy Services serves clients in sectors including banking, capital markets, consumer packaged goods, communications, education, energy, healthcare, high technology, insurance, life sciences, manufacturing, public services, retail, travel and logistics, and public sector organizations. The company operates internationally with a global presence and is publicly traded on the National Stock Exchange and Bombay Stock Exchange.",
+        "core_offerings": [
+          "IoT Solutions Development",
+          "IT Outsourcing Services",
+          "Cloud Computing Solutions",
+          "Research and Innovation Services",
+          "Business Solutions Consulting",
+          "AI Solutions Development",
+          "IT Consulting Services",
+          "Software Development Services",
+          "Cybersecurity Solutions Development",
+          "Sustainability and Community Engagement Services",
+          "Industry-Specific Digital Transformation Services",
+          "MES Software Development"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "f5b53098ee3f974ea39ed1df62d9c588a1ba5372f4d162d79c64044b18eab7e0",
+      "company_name": "ASGN",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "us",
+          "latitude": 37.65637435,
+          "longitude": -77.5781101782265,
+          "region_name": "Virginia",
+          "town": "Glen Allen"
+        },
+        "employee_count": 21000.0,
+        "is_public": true,
+        "description": "ASGN Incorporated is an American information technology services company that provides IT consulting, professional staffing, and enterprise software solutions for commercial and government clients. The company operates through two main segments: Apex Systems, which delivers technology and creative digital marketing services, and ECS, which provides mission-critical IT services to government agencies. ASGN also offers management consulting, professional training and coaching, and digital services, including data and analytics, artificial intelligence and machine learning, and cloud solutions. The company serves a broad range of industries, including financial services, healthcare, technology, media, telecommunications, business and government services, and defense, and maintains operations in North America, Mexico, Canada, and Latin America.",
+        "core_offerings": [
+          "Digital Transformation Consulting",
+          "DevOps Services",
+          "AI and Machine Learning Services",
+          "Management Consulting Services",
+          "Professional Training and Coaching Services",
+          "IT Modernization Services",
+          "Data and Analytics Services",
+          "Professional Staffing Services",
+          "Cloud Solutions Implementation",
+          "Creative Digital Marketing Services",
+          "Business Solutions Consulting",
+          "Digital Marketing Services",
+          "IT Consulting Services",
+          "Enterprise Software Development",
+          "Cybersecurity Solutions Development"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "8ff31ee231b9703e1d45193930c98d04e68ff94fbef92c74f6901ef861e7773a",
+      "company_name": "Tietoevry",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "fi",
+          "latitude": 60.170408300000005,
+          "longitude": 24.828491784095917,
+          "region_name": "Uusimaa",
+          "town": "Espoo"
+        },
+        "employee_count": 23632.0,
+        "is_public": true,
+        "description": "Tietoevry Oyj is a Finnish company engaged in software development, digital engineering, and IT consulting. The company provides services in cloud solutions, data-driven business transformation, intelligent automation, user experience services, cybersecurity, and AI-powered solutions. Tietoevry serves a broad range of industries, including automotive, financial services, healthcare, education, energy, manufacturing, public sector, pulp, paper, and packaging, as well as fintech and telecom sectors. The company operates internationally, with offices in Finland, Norway, Sweden, Denmark, Estonia, France, Germany, India, and the United States.",
+        "core_offerings": [
+          "Data-Driven Business Transformation Consulting",
+          "Sustainability and Ethical Technology Consulting",
+          "AI-Powered Solutions Development",
+          "User Experience Design Services",
+          "Digital Equality and Inclusion Services",
+          "Cybersecurity Solutions Deployment",
+          "IT Consulting Services",
+          "Digital Engineering Services",
+          "Industry-Specific Digital Solutions Development",
+          "Intelligent Automation Implementation",
+          "Cloud Solutions Development",
+          "Business Process Outsourcing Services"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "a4b0c4cf4315d39d00f8ef1a95ca323b1f154f83f1a523757752883314ff44c1",
+      "company_name": "CGI",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "ca",
+          "latitude": 45.4962042,
+          "longitude": -73.5722492,
+          "region_name": "Quebec",
+          "town": "Montreal"
+        },
+        "employee_count": 95000.0,
+        "is_public": true,
+        "description": "CGI Inc. is a Canadian multinational information technology consulting and software development company. The company provides business consulting, systems integration, managed IT services, application services, infrastructure services, business process management, and intellectual property solutions. CGI also offers professional training and coaching, and is involved in the development of IoT applications, cloud computing, and application development testing and maintenance. The company serves clients in sectors such as banking, communications, government, healthcare, insurance, life sciences, manufacturing, oil and gas, retail, transportation, utilities, aerospace, maritime, media, housing, construction, and space, with operations in over 40 countries.",
+        "core_offerings": [
+          "IT Outsourcing Services",
+          "Cloud Computing Solutions",
+          "Digital Transformation Consulting",
+          "Business Process Management Services",
+          "IoT Application Development Services",
+          "IT Infrastructure Services",
+          "Data Analytics Services",
+          "Management Consulting Services",
+          "Systems Integration Services",
+          "Managed IT Services",
+          "IT Consulting Services",
+          "Cybersecurity Solutions",
+          "Application Maintenance Services",
+          "Intellectual Property Solutions",
+          "Application Development and Testing Services",
+          "Business Consulting Services"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "134635ffe382b5007d20bd2d36ded5906b1502f9f7bd7e8ac5cadefcdc166bd1",
+      "company_name": "Booz Allen",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "us",
+          "latitude": 38.92234585,
+          "longitude": -77.23163400152733,
+          "region_name": "Virginia",
+          "town": "McLean"
+        },
+        "employee_count": 34200.0,
+        "is_public": true,
+        "description": "Booz Allen Hamilton Inc. is an American company that provides management and technology consulting, cybersecurity services, digital transformation solutions, and artificial intelligence and cloud computing services. The company also offers software development, mission readiness support, and professional training and coaching. Booz Allen serves government agencies, commercial enterprises, international organizations, and nonprofits, with operations in the United States, Southeast Asia, and Europe. The company is publicly traded and is a component of the Russell 1000 index.",
+        "core_offerings": [
+          "Systems Engineering and Integration",
+          "Research and Development Services",
+          "Mission Readiness Solutions Delivery",
+          "Digital Transformation Consulting",
+          "Human Capital Consulting Services",
+          "Communications Strategy Consulting",
+          "Professional Training and Coaching Services",
+          "Process Improvement Consulting",
+          "Supply Chain and Logistics Solutions",
+          "Business Management Consulting Services",
+          "Cloud Computing Implementation",
+          "Cybersecurity Solutions Development",
+          "Custom Software Development",
+          "Artificial Intelligence Integration Services"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "5f8259556c02bfc72f1bb823038f94c2b5108db723f5c7f34ed731e5502a15cb",
+      "company_name": "Concentrix",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "us",
+          "latitude": 37.5213532,
+          "longitude": -121.99372478509184,
+          "region_name": "California",
+          "town": "Newark"
+        },
+        "employee_count": 440000.0,
+        "is_public": true,
+        "description": "Concentrix Corporation is an American technology and services company that provides enterprise technology solutions, business process outsourcing, and business transformation services. The company delivers strategy and design, data and analytics, enterprise technology, digital operations, and specialized offerings such as contact center solutions, AI-powered digital transformation, and cybersecurity services. Concentrix serves clients in sectors including automotive, banking, financial services, energy, government, healthcare, media, retail, technology, and travel, and operates internationally across multiple regions. The company is publicly traded and has a history of strategic acquisitions.",
+        "core_offerings": [
+          "Enterprise Software Solutions Development",
+          "Outsourcing Services",
+          "Digital Transformation Consulting",
+          "AI-Powered Digital Transformation Services",
+          "Technical Support Services",
+          "Sustainability Consulting Services",
+          "Prepackaged Software Solutions Development",
+          "Contact Center Solutions Delivery",
+          "Cybersecurity Services",
+          "IT Consulting Services",
+          "Customer Experience Design and Delivery",
+          "Sales and Marketing Services",
+          "Data and Analytics Solutions Development",
+          "Digital Operations Management",
+          "Enterprise Technology Solutions Development",
+          "Business Process Outsourcing Services"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "5518d80b02fec474720f93d0087714e737403e19a00c878d0b3486e68960433a",
+      "company_name": "CACI",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "us",
+          "latitude": 38.9543424,
+          "longitude": -77.35089,
+          "region_name": "Virginia",
+          "town": "Reston"
+        },
+        "employee_count": 20000.0,
+        "is_public": true,
+        "description": "CACI International Inc is an American multinational company that provides professional services and information technology solutions for national security, government, and private sector clients. The company operates in consulting, defense, information technology, and outsourcing, offering services such as enterprise IT, mission and engineering support, space and spectrum superiority, cyber and digital solutions, and government property management. CACI also delivers business intelligence and software development, including enterprise and business systems, and supports its operations with a corporate service management system, virtual university, and related tools and platforms. The company is publicly traded on the New York Stock Exchange and is certified for sustainability and corporate social responsibility.",
+        "core_offerings": [
+          "Defense and Intelligence Consulting",
+          "Space and Spectrum Superiority Solutions",
+          "Business Intelligence Solutions Development",
+          "IT Outsourcing Services",
+          "Government Property Management Services",
+          "Mission and Engineering Support Services",
+          "Cyber and Digital Security Solutions",
+          "Healthcare IT Solutions Development",
+          "Software Development Services",
+          "Sustainability and EHS Consulting Services",
+          "Enterprise Software Development",
+          "Enterprise IT Services",
+          "National Security Solutions Consulting",
+          "Electronic Warfare Solutions Development",
+          "Unmanned Aerial Systems Countermeasures Solutions"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q2",
+      "company_id": "3de2f59c4b4a6e9191928951382c48743d234995e8a84643655a29eac270c170",
+      "company_name": "Leidos",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Public flag is true and employee_count exceeds 1000; description/offerings establish software development or enterprise software provision. Software-services providers are included by the development rubric.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "us",
+          "latitude": 38.9590871,
+          "longitude": -77.35577653156261,
+          "region_name": "Virginia",
+          "town": "Reston"
+        },
+        "employee_count": 48000.0,
+        "is_public": true,
+        "description": "Leidos, Inc. is an American company that operates as a systems integrator, engineering firm, and information technology services provider. The company delivers solutions in national security, health, defense, energy, government, and space sectors, with activities including systems integration, engineering, and IT services. Leidos also provides digital modernization, cybersecurity, and enterprise software solutions, as well as cloud and artificial intelligence services. Its operations serve both civilian and defense agencies, as well as commercial markets, and the company holds government-wide acquisition, indefinite delivery, and blanket purchase agreement contract vehicles.",
+        "core_offerings": [
+          "Advanced Sensor Technology Development",
+          "Defense Systems Engineering Services",
+          "Healthcare Systems Consulting",
+          "Cloud Infrastructure Services",
+          "Security Instrument Manufacturing",
+          "Healthcare IT Solutions Development",
+          "IT Consulting Services",
+          "Aviation Systems Engineering Services",
+          "Systems Integration and Engineering Services",
+          "Space Technology Solutions Development",
+          "Cybersecurity Solutions",
+          "Enterprise Software Development",
+          "Nondestructive Imaging Technology Development",
+          "Artificial Intelligence and Machine Learning Services",
+          "Digital Modernization Solutions"
+        ],
+        "primary_naics": {
+          "code": "541512",
+          "label": "Computer Systems Design Services"
+        }
+      }
+    },
+    {
+      "query_id": "q3",
+      "company_id": "1f1a8091d146f953438f23b1dfe3e9aab139b16d26b7c6dc4fb0f5f862f87d11",
+      "company_name": "Minh Trang Packaging",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Description and offerings establish packaging products supplied to cosmetics/personal-care markets. This is potential supply capability, not verified commercial suitability or minimum order quantities.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "vn",
+          "latitude": 10.7636815,
+          "longitude": 106.6065923,
+          "region_name": "Hồ Chí Minh City",
+          "town": "Ho Chi Minh City Saigon"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Minh Trang Packaging Co., Ltd. (CÔNG TY TNHH BAO BÌ MINH TRANG) is a Vietnamese company engaged in the manufacturing and supply of cosmetic bottles, jars, and related accessories, as well as custom packaging printing services. The company serves customers nationwide in Vietnam and operates as both a manufacturer and supplier of plastic packaging products.",
+        "core_offerings": [
+          "Direct-to-Consumer Cosmetic Packaging Sales",
+          "Custom Packaging Printing Services",
+          "Cosmetic Tool Manufacturing",
+          "Cosmetic Bottle and Jar Manufacturing",
+          "Cosmetic Packaging Wholesale",
+          "Cosmetic Cap and Lid Manufacturing",
+          "Cosmetic Packaging Retail",
+          "Cosmetic Packaging Manufacturing"
+        ],
+        "primary_naics": {
+          "code": "326160",
+          "label": "Plastics Bottle Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q3",
+      "company_id": "37739bb75be9da9d0f74e26ea6860baee72befbf0002140361717a1f10658a6f",
+      "company_name": "Standard Mold",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Description and offerings establish packaging products supplied to cosmetics/personal-care markets. This is potential supply capability, not verified commercial suitability or minimum order quantities.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "kr",
+          "latitude": 37.392357675,
+          "longitude": 126.972392825,
+          "region_name": "Gyeonggi",
+          "town": "Anyang-si"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Standard Mold.net, Inc. is a South Korean company engaged in the manufacturing and supply of cosmetic packaging and containers for the cosmetics industry. The company serves both domestic and international markets, offering a range of products including applicators, ceramic balls, make-up tubes, sunstick bottles, jars, and other cosmetic packaging items.",
+        "core_offerings": [
+          "Custom Cosmetic Packaging Development",
+          "Applicator Manufacturing",
+          "Green Packaging Manufacturing",
+          "Make-Up Tube Manufacturing",
+          "Cosmetic Packaging and Container Supply",
+          "Ceramic Ball Manufacturing",
+          "Makeup Packaging Manufacturing",
+          "Skin Care Packaging Manufacturing",
+          "Sunstick Bottle Manufacturing",
+          "Cosmetic Packaging Exporting",
+          "Jar Manufacturing",
+          "Cosmetic Packaging and Container Manufacturing"
+        ],
+        "primary_naics": {
+          "code": "326199",
+          "label": "All Other Plastics Product Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q3",
+      "company_id": "736b62d86d41697c6ddc39196e6de715c281681a30229ad9404dd19ec45300bf",
+      "company_name": "Yijie Packaging",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Description and offerings establish packaging products supplied to cosmetics/personal-care markets. This is potential supply capability, not verified commercial suitability or minimum order quantities.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "cn",
+          "latitude": 28.9786044,
+          "longitude": 120.1516006,
+          "region_name": "Zhejiang",
+          "town": "Yongkang"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Yiwu Yijie Packaging Products Co., Ltd. is a Chinese trading company engaged in the manufacturing and supply of packaging products, including plastic, glass, and paper-based packaging solutions. The company serves a global market, focusing on industries such as cosmetics, personal care, and consumer goods. Yijie Packaging operates primarily as a wholesale supplier and is certified by Alibaba.com.",
+        "core_offerings": [
+          "Blister Packaging Manufacturing",
+          "Bottle Jar Manufacturing",
+          "Gift Packaging Manufacturing",
+          "Glass Packaging Manufacturing",
+          "Packaging Products Manufacturing",
+          "Consumer Goods Packaging Manufacturing",
+          "Personal Care Packaging Manufacturing",
+          "Cosmetic Packaging Manufacturing",
+          "Packaging Products Wholesale",
+          "Plastic Packaging and Box Manufacturing",
+          "Paper Box and Bag Manufacturing",
+          "Custom Packaging Solutions Development"
+        ],
+        "primary_naics": {
+          "code": "327213",
+          "label": "Glass Container Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q3",
+      "company_id": "86130a366a6dba767ff73d5bd38328e711b65cdb0d78be397097302db46aff66",
+      "company_name": "SZ SJ Packaging",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Description and offerings establish packaging products supplied to cosmetics/personal-care markets. This is potential supply capability, not verified commercial suitability or minimum order quantities.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "cn",
+          "latitude": 22.5445741,
+          "longitude": 114.0545429,
+          "region_name": "Guangdong Province",
+          "town": "Shenzhen"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Shenzhen SJ Packaging Co., Ltd, DBA SZ SJ Packaging, is a Chinese manufacturing company specialized in the production of cosmetic packaging, including custom lipstick tubes, eyeshadow palettes, skincare bottles, and related products. The company provides end-to-end packaging solutions such as design, prototyping, production, and logistics, serving beauty brands globally. SZ SJ Packaging also offers OEM/ODM services and incorporates eco-friendly materials and sustainable practices in its operations.",
+        "core_offerings": [
+          "Eco-Friendly Cosmetic Packaging Manufacturing",
+          "ODM Cosmetic Packaging Services",
+          "Cosmetic Packaging Logistics and Distribution",
+          "Cosmetic Packaging Prototyping Services",
+          "Eyeshadow Palette Manufacturing",
+          "Cosmetic Packaging Production",
+          "Beauty Brand Packaging Solutions",
+          "Foundation Bottle Manufacturing",
+          "Custom Cosmetic Packaging Design Services",
+          "Lipstick Tube Manufacturing",
+          "Mascara Tube Manufacturing",
+          "Compact Case Manufacturing",
+          "OEM Cosmetic Packaging Services",
+          "Cosmetic Packaging Manufacturing",
+          "Sustainable Packaging Solutions",
+          "Skincare Bottle Manufacturing"
+        ],
+        "primary_naics": {
+          "code": "326199",
+          "label": "All Other Plastics Product Manufacturing"
+        }
+      }
+    },
+    {
+      "query_id": "q3",
+      "company_id": "2cf47dd1f4d556d0c07c17f719bff9b9d979514743cfc9a437475d4bb8050021",
+      "company_name": "Shenzhen Itop Cosmetic Packaging",
+      "selection": "assistant_profile_review_2026_11_20",
+      "label": "relevant",
+      "reason": "Description and offerings establish packaging products supplied to cosmetics/personal-care markets. This is potential supply capability, not verified commercial suitability or minimum order quantities.",
+      "review_status": "proposed_by_assistant",
+      "evidence": {
+        "address": {
+          "country_code": "cn",
+          "latitude": 22.7456802,
+          "longitude": 114.3658627,
+          "region_name": "Guangdong Province",
+          "town": "Pingshan District"
+        },
+        "employee_count": null,
+        "is_public": false,
+        "description": "Shenzhen Itop Cosmetic Packaging Co., Ltd. is a Chinese manufacturing company engaged in cosmetic packaging solutions. The company serves a global market, focusing on the cosmetics industry and providing customized packaging products such as bottles, jars, tubes, and accessories.",
+        "core_offerings": [
+          "Custom Cosmetic Packaging Development",
+          "Cosmetic Packaging Global Distribution",
+          "Cosmetic Packaging Accessories Manufacturing",
+          "Cosmetic Packaging and Bottle Manufacturing",
+          "Cosmetic Packaging Supply",
+          "Cosmetic Jar and Tube Manufacturing"
+        ],
+        "primary_naics": {
+          "code": "326160",
+          "label": "Plastics Bottle Manufacturing"
+        }
+      }
     }
-  ]
+  ],
+  "review_note": "Additional profile inspection by assistant; labels remain proposed, not human-validated. Runtime role checks never read this file. Development results are not held-out accuracy."
 }

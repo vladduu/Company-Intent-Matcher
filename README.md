@@ -6,7 +6,7 @@ A project for the Veridion Intent Qualification challenge: ranking and qualifyin
 
 Dataset inspection, normalization, deduplication, and basic keyword search are available.
 An optional rule parser, structured filters, and local embedding retrieval are
-available. Full business-role qualification is not implemented yet.
+available. Optional API-based business-role qualification is available for a bounded hybrid shortlist; its quality still requires reviewed evaluation.
 
 ## Project structure
 
@@ -144,3 +144,118 @@ constraints are not magically handled by adding embeddings.
 
 Model documentation: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
 Semantic search documentation: https://www.sbert.net/examples/sentence_transformer/applications/semantic-search/README.html
+
+
+## Compare profile representations
+
+The default `full` profile preserves the original input fields. `description`
+uses only the description; missing descriptions are excluded from activity search.
+Each representation has a separate embedding cache. This is an experiment, not
+an assumed accuracy improvement. Run the same queries and review their profiles:
+
+```powershell
+python evaluate.py --method hybrid --profile full --output outputs/hybrid-full.json
+python evaluate.py --method hybrid --profile description --output outputs/hybrid-description.json
+```
+
+Reports include company profiles, IDs, scores, existing proposed labels and
+unknown/rejected candidates. They never overwrite development labels. Unjudged
+results are not negatives. Review new results manually before claiming precision.
+
+## Qualify a shortlist (optional API calls)
+
+Set these environment variables in your PowerShell terminal (do not commit keys):
+
+```powershell
+$env:OPENAI_API_KEY="YOUR_API_KEY"
+$env:QUALIFICATION_MODEL="YOUR_STRUCTURED_OUTPUT_MODEL"
+python solution.py --method hybrid --profile description --qualify --candidates 30 --query "Logistics companies in Romania" --top 10
+python evaluate.py --method hybrid --profile description --qualify --candidates 30 --output outputs/qualified-description.json
+```
+
+Choose an OpenAI model available to your API account that supports structured
+outputs. API usage requires separate API access/billing. This option sends the
+query and full profiles of up to 30 passing candidates to OpenAI, one at a time;
+it does not send the entire dataset. No additional Python dependency is required.
+Without `--qualify`, retrieval remains local after the model download.
+
+Qualification checks the original query, including constraints unsupported by the
+parser. It returns relevant, not_relevant or insufficient_information with a reason
+and verbatim profile evidence. Evidence strings are checked against profile values;
+this guards against invented quotes, but does not prove the reasoning is correct.
+Missing/invalid evidence cannot produce an accepted result. Unknown structured
+filter candidates remain separate and are not sent for qualification. Results keep
+semantic order within the accepted group; fewer than --top results is valid.
+
+Verdicts are cached under `.cache/qualification` by query, full profile, model,
+prompt and schema. Repeated requests reuse successful verdicts. API/network failures
+stop the run with an error; prior successful verdicts remain cached. Use a versioned
+model name when available for reproducibility. Manual deletion of this cache forces
+fresh judgments. No automatic retries, concurrent API calls or recall guarantee
+are implemented yet. Relevant companies outside the shortlist cannot be recovered.
+
+API reference: https://developers.openai.com/api/reference/resources/responses/methods/create
+
+
+## Local reranking (no API key)
+
+```powershell
+python solution.py --method rerank --profile description --query "Logistics companies in Romania" --top 10
+python evaluate.py --method rerank --profile description --output outputs/rerank-description.json
+```
+
+`rerank` applies the existing structured filters, retrieves up to `--candidates`
+profiles per pass/unknown group (default 100), then scores query/profile pairs
+locally with `cross-encoder/ms-marco-MiniLM-L6-v2`. It reranks before taking the
+final top results. Unknown filter candidates remain separate. The residual
+activity is used after supported hard constraints are checked. The reranker reads
+the description first, followed by offerings, business model and target markets;
+`--profile` controls the initial embedding retrieval only. Empty activity preserves
+filter-only ordering. Profiles with no usable text cannot be ranked for activity.
+
+The first run downloads another model (about 90 MB weights) into `.cache/reranker`.
+It runs on CPU with the existing sentence-transformers dependency. No Gemini,
+OpenAI account, key or API calls are involved in this method. Original retrieval
+scores are retained in JSON as `retrieval_score`; the final `score` is a raw
+reranker logit, which can be negative and is not a probability. Scores cannot be
+compared to embedding cosine scores. No arbitrary acceptance threshold is used.
+This improves the ranking architecture but is not a verified qualification verdict.
+
+For this small dataset, `--candidates 457` can test shortlist recall by reranking
+all text-bearing profiles that survive filters. That costs more CPU time. At
+scale, keep a bounded shortlist and measure recall against reviewed judgments.
+Model reference: https://sbert.net/docs/cross_encoder/pretrained_models.html
+
+
+### Evidence-based local selection
+
+`rerank` now checks supported business roles after reranking the whole shortlist,
+before taking `--top`. It may return fewer results; rejected or uncertain candidates
+are never added just to fill the list. `--rank-only` restores the ranking baseline.
+`logistic` and `logistics` are canonicalized by the structured parser, so these
+variants share retrieval and reranking behavior.
+
+The local role rules in `role_checks.py` currently cover simple logistics requests,
+software (including software engineering/services providers), and the development
+query asking for potential cosmetics-packaging suppliers. They require profile
+evidence, preserve unknown structured conditions, and report the source of each
+judgment. Infrastructure/facility leasing and contradictory offering lists are
+uncertain. Packaging capability is not a guarantee of price, MOQ, certification,
+or suitability for a particular customer. Unsupported residual intent is returned
+for review rather than silently qualified. These bounded rules do NOT solve all
+12 challenge queries or arbitrary English; they prioritize precision on supported
+roles at a possible recall cost. No company names, IDs or evaluation labels enter
+the production rules. No score threshold has been selected from this dataset.
+
+```powershell
+python evaluate.py --method rerank --profile description --output outputs/rerank-qualified.json
+python evaluate.py --method rerank --profile description --rank-only --output outputs/rerank-baseline.json
+```
+
+Development labels now include assistant inspection of all 26 Romanian profiles
+and the previous top-ten software/packaging results. They remain proposals, not
+human-validated ground truth. The reports retain all uncertain shortlist candidates
+in `review_candidates` and rejected candidates separately. Relevant@10 penalizes
+returning fewer than ten even when the dataset has fewer matches; precision among
+returned results is also printed when all returned labels are decisive. Neither
+metric establishes generalization on these development queries.

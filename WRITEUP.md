@@ -126,3 +126,106 @@ with Windows access denied; a temporary-target installation stopped reporting
 progress and was interrupted. Therefore no semantic quality or latency results
 are claimed yet. Complete installation and run both semantic and hybrid evaluation
 before drawing conclusions or treating this as a validated submission.
+
+
+## Profile ablation and selective qualification
+
+Added explicit full/description representation selection with separate embedding
+cache identities. Full remains the baseline; description-only can lose offering
+evidence and excludes profiles without descriptions. Compare both on identical
+queries before selecting a default. The supplied real-model rankings exposed
+retailers and companies using logistics internally among logistics results.
+
+Optional qualification sends only the passing hybrid shortlist to an API model,
+using the original query and full profiles. Its three-state verdict, explanation
+and exact evidence excerpts distinguish business roles. Excerpts must occur in
+the profile; that check cannot validate the interpretation or source accuracy.
+Labels in the development set remain independent from generated verdicts.
+Reports expose profiles for human review, decisive-label coverage and unjudged
+counts. Current labels remain assistant-proposed, not verified ground truth.
+
+Tradeoffs: one request per uncached candidate is simple but sequential and may be
+slow. The shortlist caps cost but limits recall. Cache identity covers query,
+profile, prompt, schema and model name; mutable model aliases can still change.
+Unsupported filters may survive retrieval, so the qualifier must inspect all
+constraints. Missing evidence is unknown rather than assumed false. Monitor
+acceptance/unknown rates, retrieval recall on reviewed samples, invalid evidence,
+API failures, latency and cache hit rates before production. At scale, batch or
+bound concurrency for shortlist calls and use indexed candidate retrieval.
+
+Validation of this increment: 26 offline tests pass, including evidence rejection,
+qualification cache invalidation, unknown separation and description-mode isolation.
+Live API qualification has not been tested with credentials. Real-model evaluation
+in this tool environment was blocked by missing socksio for its configured proxy;
+no measured accuracy improvement is claimed. The user's earlier local runs worked.
+
+
+## Local reranking alternative
+
+The `rerank` method requires no paid API: bounded hybrid retrieval feeds a local
+MS MARCO MiniLM cross-encoder. Unlike independently computed embeddings, it scores
+each query/profile pair jointly. Description-first text prioritizes main activity;
+512-token truncation can still omit evidence. It is a general passage relevance
+model, not a model trained on these company labels. Missing facts and complex
+business roles remain potential failures. No uncalibrated score is presented as a
+probability or definitive verdict. Unknown filter groups remain separate.
+
+Default shortlist size is 100 per group. This covers all 26 Romanian candidates
+and all 36 candidates passing the public/employee filters in the current dataset.
+Unconstrained queries still depend on retrieval recall. At scale, use indexed
+retrieval, measure recall, and bound reranking cost. API qualification remains an
+optional separate experiment; it is not used by the local rerank method.
+
+Thirty automated tests pass, including reranking order, preservation of unknown
+filter status, invalid score rejection and filter-only queries. These software
+tests use deterministic doubles and do not establish model accuracy.
+
+
+Real-model validation of local reranking completed on the 457 normalized profiles
+with description retrieval and 100 candidates. The report is saved locally at
+outputs/rerank-description.json. For q1, Brasov Industrial Portfolio ranked first
+and Posta Romana tenth; Dacia and Sincron HR dropped out of the top ten. CBRE
+Romania remains a known negative, so the role distinction is not solved. For q2,
+Globant ranked first and EPAM second; Bachem and Siegfried left the top ten. For
+q3, five returned companies have proposed relevant labels and five are unjudged.
+The proposed-label relevant@10 lower bounds are 0.10, 0.10 and 0.50 respectively;
+these are not reviewed precision estimates or proof of general accuracy gains.
+The test process used a temporary workspace copy of socksio for its SOCKS proxy;
+no Python environment or system settings were modified.
+
+
+## Conservative local role selection (2026-11-20)
+
+Reranking alone still put property and equipment providers among logistics firms.
+The local pipeline now checks explicit role evidence across the ranked shortlist
+before limiting the accepted list. It does not fill vacant top-ten slots. Simple
+logistics activity, software provision (including engineering services), and the
+cosmetics-packaging development intent have bounded rules. Description evidence is
+required; ambiguous infrastructure/facility leasing and secondary service claims
+are separated for review. Unknown structured conditions cannot become accepted.
+Extra unsupported residual constraints cannot be silently discarded by these
+rules: they abstain. They are not a general solution to the twelve challenge
+queries; new role families and independent evaluation remain necessary.
+
+Logistic/logistics normalize identically in the parser. Runtime rules contain no
+company names or dataset IDs and never load the development labels. Evaluation
+labels were separately extended through assistant profile inspection: all 26
+Romanian profiles have proposed judgments (2 relevant, 9 insufficient, 15 negative),
+as do the prior software and packaging top tens. Human review remains outstanding.
+The definition includes explicit external postal/parcel/cargo-handling services;
+software includes development services; packaging means potential supply, not a
+verified contract fit. Altering these definitions may alter the judgments.
+
+Real-model evaluation with description retrieval and 100 candidates now returns
+Posta Romana and Portul Constanta for q1; q2 returns ten proposed-relevant software
+providers beginning Globant, EPAM and Tata Consultancy Services; q3 returns ten
+proposed-relevant packaging suppliers. The proposed-label relevant@10 values are
+0.20, 1.00 and 1.00. These are DEVELOPMENT results with assistant-proposed labels,
+not independent accuracy. Some score increases reflect labeling previously
+unjudged candidates, not better ranking. Conservative rules can lose true matches,
+especially unseen phrasing and secondary activities. No minimum logit cutoff is
+claimed to be calibrated. `--rank-only` retains the original ranking experiment.
+
+Validation: 39 tests passed; real-model evaluation completed for all three queries;
+a separate real-model check confirmed identical accepted company lists AND scores
+for Logistic and Logistics. The review report is outputs/rerank-qualified.json.

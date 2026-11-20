@@ -69,3 +69,18 @@ Records are identified by a SHA-256 of the full normalized profile, not by name:
 two different Rompetrol or Sesame HR records must not share a label accidentally.
 The original dataset hash is checked before evaluation. The ranking algorithm was
 not modified during this evaluation. Keep a separate held-out set for final testing.
+
+
+## Additional profile inspection (2026-11-20)
+
+All 26 profiles whose normalized primary country is Romania have proposed q1
+judgments. Postal/parcel services and explicit cargo handling count as logistics;
+property leasing, infrastructure access and ambiguous secondary offerings are
+insufficient information. Product distribution alone is not logistics provision.
+The prior reranker top tens for q2 and q3 have also been inspected. Software
+includes development/engineering service providers, not only product publishers.
+Packaging relevance means potential supply capability for cosmetics/personal-care
+brands; no MOQ, price, or contract suitability is inferred. Existing labels are
+preserved; added judgments carry proposed_by_assistant status and profile evidence.
+These are development labels, not held-out accuracy or human review. Production
+role rules never load the labels. Changes to the rubric need independent review.

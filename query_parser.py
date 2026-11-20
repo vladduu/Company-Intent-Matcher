@@ -55,6 +55,8 @@ def parse_query(query):
     # The residual is search text, not a claim that we understood its full meaning.
     text = re.sub(r"\b(find|companies|company)\b", " ", text)
     text = " ".join(text.split()).strip(" ,")
+    # Normalize an equivalent activity variant for both embedding and reranking stages.
+    text = re.sub(r"\blogistic\b", "logistics", text)
     if re.search(r"\b(employees|public|private|revenue|founded|in|not|or|with)\b", text):
         warnings.append("Residual text may contain unsupported constraints; these were not applied as filters.")
     warnings.append("Activity and business role are still checked by keyword overlap, not semantic qualification.")
