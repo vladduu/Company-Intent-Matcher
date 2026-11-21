@@ -6,7 +6,6 @@ Unconsumed words prevent a positive verdict rather than dropping constraints.
 
 import re
 
-
 CONCEPTS = {
     "food": r"food(?: and beverage)?|beverages?",
     "pharma": r"pharmaceuticals?|pharma|drug",
@@ -54,8 +53,13 @@ SUPPORTED_FAMILIES = (
 )
 
 MANUFACTURING = r"manufactur\w*|produc(?:e[sd]?|ing|tion)"
-PROVIDER_ACTION = MANUFACTURING + r"|develop\w*|supply|supplies|provid\w*|offer\w*|specializ\w*|engaged in"
-CUSTOMER_CONTEXT = re.compile(r"\b(?:clients|customers|serves|serving|industries|sectors)\b", re.I)
+PROVIDER_ACTION = (
+    MANUFACTURING
+    + r"|develop\w*|supply|supplies|provid\w*|offer\w*|specializ\w*|engaged in"
+)
+CUSTOMER_CONTEXT = re.compile(
+    r"\b(?:clients|customers|serves|serving|industries|sectors)\b", re.I
+)
 
 
 def text_values(value):
@@ -100,26 +104,70 @@ class ProfileEvidence:
     def check_industry(self, concepts):
         if "food" in concepts:
             topic = r"food|beverages?|meat|dairy|cheese|bread|bakery|soft drinks|beer|wine|snacks"
-            self.require("food/beverage manufacturing", self.direct(topic, MANUFACTURING))
-            self.require("food/beverage product offering", matching_text(topic, self.offerings))
+            self.require(
+                "food/beverage manufacturing", self.direct(topic, MANUFACTURING)
+            )
+            self.require(
+                "food/beverage product offering", matching_text(topic, self.offerings)
+            )
         if "pharma" in concepts:
             topic = r"pharmaceutical|medicines?|drug (?:discovery|development|manufacturing)|active pharmaceutical ingredients|peptides"
-            self.require("pharmaceutical development, production or supply", self.direct(topic))
-            self.require("pharmaceutical offering", matching_text(topic, self.offerings))
+            self.require(
+                "pharmaceutical development, production or supply", self.direct(topic)
+            )
+            self.require(
+                "pharmaceutical offering", matching_text(topic, self.offerings)
+            )
         if "construction" in concepts:
-            self.require("construction execution", self.direct(r"construction|civil engineering|building services|infrastructure contracting"))
-            self.require("construction service offering", matching_text(r"construction|civil engineering|general contracting", self.offerings))
-            if re.search(r"construction (?:software|equipment|materials)|building materials", self.text) and not self.direct(r"construction services|construction projects|general contracting"):
-                self.missing.append("construction operator rather than software/equipment/materials vendor")
+            self.require(
+                "construction execution",
+                self.direct(
+                    r"construction|civil engineering|building services|infrastructure contracting"
+                ),
+            )
+            self.require(
+                "construction service offering",
+                matching_text(
+                    r"construction|civil engineering|general contracting",
+                    self.offerings,
+                ),
+            )
+            if re.search(
+                r"construction (?:software|equipment|materials)|building materials",
+                self.text,
+            ) and not self.direct(
+                r"construction services|construction projects|general contracting"
+            ):
+                self.missing.append(
+                    "construction operator rather than software/equipment/materials vendor"
+                )
 
     def check_business_model(self, concepts):
         if "hr" in concepts:
-            self.require("HR software provider", self.direct(r"(?:hr|human resources|payroll)[^.;]{0,50}(?:software|platform|solutions)|software[^.;]{0,50}(?:hr|human resources|payroll)"))
+            self.require(
+                "HR software provider",
+                self.direct(
+                    r"(?:hr|human resources|payroll)[^.;]{0,50}(?:software|platform|solutions)|software[^.;]{0,50}(?:hr|human resources|payroll)"
+                ),
+            )
         if "saas" in concepts:
-            self.require("SaaS delivery", matching_text(r"software.as.a.service|\bsaas\b", self.models + [self.description]) or
-                    self.direct(r"cloud-based[^.;]{0,60}(?:software|platform|hr|management systems)"))
+            self.require(
+                "SaaS delivery",
+                matching_text(
+                    r"software.as.a.service|\bsaas\b", self.models + [self.description]
+                )
+                or self.direct(
+                    r"cloud-based[^.;]{0,60}(?:software|platform|hr|management systems)"
+                ),
+            )
         if "b2b" in concepts:
-            self.require("business customers", matching_text(r"business.to.business|\bb2b\b", self.models) or self.direct(r"software[^.;]{0,80}for (?:businesses|organizations|enterprises)"))
+            self.require(
+                "business customers",
+                matching_text(r"business.to.business|\bb2b\b", self.models)
+                or self.direct(
+                    r"software[^.;]{0,80}for (?:businesses|organizations|enterprises)"
+                ),
+            )
 
     def check_energy(self, concepts):
         if "energy" in concepts:
@@ -128,40 +176,99 @@ class ProfileEvidence:
             self.require("energy offering", matching_text(topic, self.offerings))
         if "startup" in concepts:
             # Age/headcount alone do not prove startup status.
-            self.require("explicit startup status", matching_text(r"\bstart-?up\b", [self.description]))
+            self.require(
+                "explicit startup status",
+                matching_text(r"\bstart-?up\b", [self.description]),
+            )
         if "equipment" in concepts:
             equipment = r"turbines?|solar panels?|inverters?|photovoltaic (?:modules|panels)|generators?|electroly[sz]ers?|equipment"
             self.require("energy equipment", self.direct(equipment))
 
     def check_manufacturing(self, concepts):
         if "manufacturer" in concepts and "food" not in concepts:
-            topic = r"turbines?|solar panels?|inverters?|modules|generators?|electroly[sz]ers?|equipment" if "energy" in concepts else r"pharmaceutical|drug|battery|cathode|anode|electrolyte|separator|components"
-            self.require("manufacturing, not just reselling/installation", self.direct(topic, MANUFACTURING))
+            topic = (
+                r"turbines?|solar panels?|inverters?|modules|generators?|electroly[sz]ers?|equipment"
+                if "energy" in concepts
+                else r"pharmaceutical|drug|battery|cathode|anode|electrolyte|separator|components"
+            )
+            self.require(
+                "manufacturing, not just reselling/installation",
+                self.direct(topic, MANUFACTURING),
+            )
             if re.search(r"investment|investors|portfolio|pension", self.text):
-                self.require("explicit own production rather than investment in producers",
-                        self.direct(topic, r"manufactures|produces|manufacturing of|production of"))
+                self.require(
+                    "explicit own production rather than investment in producers",
+                    self.direct(
+                        topic, r"manufactures|produces|manufacturing of|production of"
+                    ),
+                )
 
     def check_fintech(self, concepts):
         if "fintech" in concepts:
-            self.require("financial technology provider", self.direct(r"fintech|financial technology|digital (?:banking|payment|lending)|financial (?:platform|services)") or
-                    matching_text(r"\bfintech company\b|\bneobank\b|\bchallenger bank\b", [self.description]))
+            self.require(
+                "financial technology provider",
+                self.direct(
+                    r"fintech|financial technology|digital (?:banking|payment|lending)|financial (?:platform|services)"
+                )
+                or matching_text(
+                    r"\bfintech company\b|\bneobank\b|\bchallenger bank\b",
+                    [self.description],
+                ),
+            )
         if "growth" in concepts:
-            self.require("explicit rapid growth evidence (not inferred from size)", matching_text(r"\bfast-growing\b|\brapidly growing\b|(?:revenue|customers|users).{0,45}(?:grew|growth|increased).{0,20}\d+\s*%", [self.description]))
+            self.require(
+                "explicit rapid growth evidence (not inferred from size)",
+                matching_text(
+                    r"\bfast-growing\b|\brapidly growing\b|(?:revenue|customers|users).{0,45}(?:grew|growth|increased).{0,20}\d+\s*%",
+                    [self.description],
+                ),
+            )
         if "bank_competitor" in concepts:
-            self.require("bank competitor role", matching_text(r"neobank|challenger bank|compet\w*[^.;]{0,60}(?:traditional )?banks|alternative to (?:traditional )?banks", [self.description]))
+            self.require(
+                "bank competitor role",
+                matching_text(
+                    r"neobank|challenger bank|compet\w*[^.;]{0,60}(?:traditional )?banks|alternative to (?:traditional )?banks",
+                    [self.description],
+                ),
+            )
 
     def check_commerce(self, concepts):
         if "ecommerce" in concepts:
-            self.require("operates ecommerce retail", matching_text(r"e-commerce|ecommerce|online retail", self.models + [self.description]))
+            self.require(
+                "operates ecommerce retail",
+                matching_text(
+                    r"e-commerce|ecommerce|online retail",
+                    self.models + [self.description],
+                ),
+            )
         if "platform" in concepts:
-            self.require("uses a named commerce platform", self.direct(r"(?:shopify|woocommerce|magento|bigcommerce)", r"uses?|using|powered by|built on|runs? on|operates? on"))
+            self.require(
+                "uses a named commerce platform",
+                self.direct(
+                    r"(?:shopify|woocommerce|magento|bigcommerce)",
+                    r"uses?|using|powered by|built on|runs? on|operates? on",
+                ),
+            )
 
     def check_battery_components(self, concepts):
         if "battery" in concepts:
-            self.require("electric vehicle battery production context", matching_text(r"(?:electric vehicle|\bev\b)[^.;]{0,70}batter|batter[^.;]{0,70}(?:electric vehicle|\bev\b)", [self.description]))
+            self.require(
+                "electric vehicle battery production context",
+                matching_text(
+                    r"(?:electric vehicle|\bev\b)[^.;]{0,70}batter|batter[^.;]{0,70}(?:electric vehicle|\bev\b)",
+                    [self.description],
+                ),
+            )
             components = r"cathode|anode|electrolyte|separator|battery.grade lithium|battery.grade graphite|battery components|battery materials"
-            self.require("battery input/component supply", self.direct(components, MANUFACTURING + r"|supply|supplies|supplier of"))
-            self.require("component offering", matching_text(components, self.offerings))
+            self.require(
+                "battery input/component supply",
+                self.direct(
+                    components, MANUFACTURING + r"|supply|supplies|supplier of"
+                ),
+            )
+            self.require(
+                "component offering", matching_text(components, self.offerings)
+            )
 
 
 def check_extended_role(company, activity):
@@ -171,9 +278,13 @@ def check_extended_role(company, activity):
     profile = ProfileEvidence(company)
     if remainder:
         profile.missing.append("unsupported residual wording: " + remainder)
-    if not profile.description or re.search(r"\b(?:does not|doesn't|no longer)\b", profile.text):
+    if not profile.description or re.search(
+        r"\b(?:does not|doesn't|no longer)\b", profile.text
+    ):
         profile.missing.append("affirmative company description")
-    if not any(required <= concepts <= allowed for required, allowed in SUPPORTED_FAMILIES):
+    if not any(
+        required <= concepts <= allowed for required, allowed in SUPPORTED_FAMILIES
+    ):
         profile.missing.append("supported combination of business roles")
 
     profile.check_industry(concepts)
@@ -186,8 +297,11 @@ def check_extended_role(company, activity):
 
     return {
         "verdict": "insufficient_information" if profile.missing else "relevant",
-        "reason": ("Missing evidence: " + "; ".join(profile.missing) if profile.missing
-                   else "Profile supports all recognized business-role requirements."),
+        "reason": (
+            "Missing evidence: " + "; ".join(profile.missing)
+            if profile.missing
+            else "Profile supports all recognized business-role requirements."
+        ),
         "evidence": list(dict.fromkeys(profile.evidence)),
         "missing_requirements": profile.missing,
         "recognized_concepts": sorted(concepts),

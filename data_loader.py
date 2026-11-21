@@ -4,7 +4,6 @@ import ast
 import json
 from pathlib import Path
 
-
 DEFAULT_DATASET_PATH = Path(__file__).resolve().parent / "data" / "companies.jsonl"
 
 

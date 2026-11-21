@@ -2,7 +2,6 @@
 
 import re
 
-
 WORD_VARIANTS = {
     "logistic": "logistics",
     "cosmetics": "cosmetic",
@@ -37,7 +36,9 @@ def build_company_text(company):
         if isinstance(value, str):
             parts.append(value)
         elif isinstance(value, list):
-            parts.extend(item for item in value if isinstance(item, str))
+            for item in value:
+                if isinstance(item, str):
+                    parts.append(item)
     return " ".join(parts)
 
 
@@ -58,11 +59,13 @@ def search_companies(companies, query, top=10, normalize_variants=False):
             company_words = normalize_words(company_words)
         matched_words = sorted(query_words & company_words)
         if matched_words:
-            results.append({
-                "company": company,
-                "score": len(matched_words),
-                "matched_words": matched_words,
-            })
+            results.append(
+                {
+                    "company": company,
+                    "score": len(matched_words),
+                    "matched_words": matched_words,
+                }
+            )
 
     results.sort(key=lambda result: result["score"], reverse=True)
     return results[:top]

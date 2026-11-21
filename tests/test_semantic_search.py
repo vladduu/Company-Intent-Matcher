@@ -13,8 +13,14 @@ class FakeEncoder:
 
     def encode(self, texts):
         self.calls.append(texts)
-        return [[1, 0] if any(word in text.lower() for word in ("logistic", "freight"))
-                else [0, 1] for text in texts]
+        return [
+            (
+                [1, 0]
+                if any(word in text.lower() for word in ("logistic", "freight"))
+                else [0, 1]
+            )
+            for text in texts
+        ]
 
 
 class SemanticTests(unittest.TestCase):
@@ -29,8 +35,11 @@ class SemanticTests(unittest.TestCase):
         ]
 
     def engine(self, companies=None, encoder=None):
-        return SemanticSearch(self.companies if companies is None else companies,
-                              encoder=encoder or FakeEncoder(), cache_dir=self.temp.name)
+        return SemanticSearch(
+            self.companies if companies is None else companies,
+            encoder=encoder or FakeEncoder(),
+            cache_dir=self.temp.name,
+        )
 
     def test_hybrid_preserves_filters_and_unknowns(self):
         output = self.engine().search("Logistic companies in Romania", hybrid=True)
@@ -54,8 +63,8 @@ class SemanticTests(unittest.TestCase):
 
     def test_corrupt_cache_is_rebuilt(self):
         self.engine()
-        for path in Path(self.temp.name).glob('*.json'):
-            path.write_text('{bad json', encoding='utf-8')
+        for path in Path(self.temp.name).glob("*.json"):
+            path.write_text("{bad json", encoding="utf-8")
         self.assertFalse(self.engine().cache_hit)
 
     def test_empty_dataset_and_missing_text(self):
@@ -63,7 +72,9 @@ class SemanticTests(unittest.TestCase):
         self.assertEqual(self.engine([{}]).search("logistics")["results"], [])
 
     def test_filter_only_query_does_not_invent_activity(self):
-        output = self.engine([{"is_public": True}]).search("Public companies", hybrid=True)
+        output = self.engine([{"is_public": True}]).search(
+            "Public companies", hybrid=True
+        )
         self.assertEqual(len(output["results"]), 1)
 
     def test_scores_and_stable_ties(self):
@@ -74,5 +85,5 @@ class SemanticTests(unittest.TestCase):
             self.engine().search("logistics", top=0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
