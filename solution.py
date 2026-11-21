@@ -34,6 +34,7 @@ def main():
     inputs.add_argument("--query", help="One company search request")
     inputs.add_argument("--queries", type=Path, help="JSON file containing query objects with id/text")
     parser.add_argument("--output", type=Path, help="Save all results, evidence and timings as JSON")
+    parser.add_argument("--details", action="store_true", help="Show filters, scores, evidence and candidates needing review")
     parser.add_argument("--data", type=Path, default=DEFAULT_DATASET_PATH, help="Company JSONL dataset")
     parser.add_argument("--top", type=int, default=10)
     add_options(parser, default_method="rerank")
@@ -54,31 +55,21 @@ def main():
         if not queries:
             return
         engine = SearchPipeline(companies, args.method, args.profile, args.candidates, args.rank_only, args.qualify)
-        report = {"method": args.method, "profile": args.profile, "top": args.top, "candidates": args.candidates,
-                  "dataset_sha256": hashlib.sha256(args.data.read_bytes()).hexdigest(),
-                  "company_count": len(companies), "data_load_seconds": data_seconds,
-                  "model_index_load_seconds": engine.load_seconds,
-                  "configuration": engine.metadata,
-                  "profile_cache_reused": engine.engine.cache_hit if engine.engine else None,
-                  "queries": []}
+        if args.output:
+            report = {"method": args.method, "profile": args.profile, "top": args.top, "candidates": args.candidates,
+                      "dataset_sha256": hashlib.sha256(args.data.read_bytes()).hexdigest(),
+                      "company_count": len(companies), "data_load_seconds": data_seconds,
+                      "model_index_load_seconds": engine.load_seconds,
+                      "configuration": engine.metadata,
+                      "profile_cache_reused": engine.engine.cache_hit if engine.engine else None,
+                      "queries": []}
         for query in queries:
             output = engine.search(query["text"], args.top)
-            report["queries"].append({"query": query, **output})
-            print(f"\n{query['id']}: {query['text']}")
-            print(f"Structured filter counts: {output['counts']}")
-            if args.queries:
-                print(f"Returned: {len(output['results'])}; qualification: {output.get('qualification_counts', 'not applied')}; seconds: {output['timings_seconds']['total']:.3f}")
-                for rank, item in enumerate(output["results"], 1):
-                    print(f"  {rank}. {item['company'].get('operational_name')}")
-            else:
-                print("Parsed query:")
-                print(json.dumps(output["parsed_query"], ensure_ascii=False, indent=2))
-                print("Evidence-supported candidates:" if output["qualified"] else "Ranked candidates (not qualified):")
-                show_results(output["results"])
-                print("\nUnknown filters or insufficient evidence:")
-                show_results(output["uncertain_results"])
-                if "qualification_counts" in output:
-                    print(f"Qualification counts: {output['qualification_counts']}")
+            if args.output:
+                report["queries"].append({"query": query, **output})
+            title = f"[{query['id']}] {query['text']}" if args.queries else query["text"]
+            print(f"\n{title}")
+            show_query_results(output, details=args.details)
         if args.output:
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
@@ -87,29 +78,46 @@ def main():
         parser.exit(1, f"Search error: {error}\n")
 
 
-def show_results(results):
-    if not results:
-        print("No candidates returned.")
-        return
+def show_query_results(output, details=False):
+    results = output["results"]
+    uncertain = output["uncertain_results"]
+    if details:
+        print("Parsed query:")
+        print(json.dumps(output["parsed_query"], ensure_ascii=False, indent=2))
+        print(f"Structured filter counts: {output['counts']}")
 
-    reranked = results[0].get("score_type") == "reranker_logit"
-    semantic = results[0].get("score_type") == "cosine_similarity"
-    print("\nLocally reranked candidates (score is not a probability):" if reranked else
-          "\nSemantic candidates (cosine similarity, not probability):" if semantic else
-          "\nKeyword results (score = number of distinct query words found):")
+    label = "Qualified results" if output["qualified"] else "Ranked candidates"
+    print(f"{label}: {len(results)}")
+    show_results(results, details=details)
+
+    shortlists = output.get("qualification_counts", {})
+    review_count = shortlists.get("insufficient_information", len(uncertain))
+    if review_count:
+        print(f"Candidates needing review: {review_count}")
+        if details:
+            show_results(uncertain, details=True)
+        else:
+            print("Use --details to see why candidates need review.")
+
+
+def show_results(results, details=False):
     for rank, result in enumerate(results, start=1):
         name = result["company"].get("operational_name") or "Unnamed company"
-        if reranked:
-            print(f"{rank}. {name} | Reranker: {result['score']:.4f}")
-        elif semantic:
-            print(f"{rank}. {name} | Similarity: {result['score']:.4f}")
-        else:
-            words = ", ".join(result["matched_words"])
-            print(f"{rank}. {name} | Score: {result['score']} | Matched words: {words}")
-        if "qualification" in result:
-            verdict = result["qualification"]
-            print(f"   {verdict['verdict']}: {verdict['reason']}")
-            for quote in verdict["evidence"]:
+        print(f"{rank}. {name}")
+        verdict = result.get("qualification")
+        if details:
+            score_type = result.get("score_type", "word overlap")
+            print(f"   Score ({score_type}): {result['score']:.4g}")
+            if result.get("matched_words"):
+                print(f"   Matched words: {', '.join(result['matched_words'])}")
+            checks = result.get("filter_check", {}).get("checks", [])
+            missing = [check["field"] for check in checks if check["status"] == "unknown"]
+            if missing:
+                print(f"   Missing or invalid filter values: {', '.join(missing)}")
+        if verdict:
+            print(f"   {verdict['reason']}")
+            if details and verdict["evidence"]:
+                quote = verdict["evidence"][0]
                 preview = quote if len(quote) <= 240 else quote[:237] + "..."
                 print(f"   Evidence: {preview}")
 
