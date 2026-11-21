@@ -2,15 +2,18 @@
 
 Run from the project root:
 
-```bash
-python evaluate.py
+```powershell
+python evaluate.py --method keyword
+python evaluate.py --method semantic --profile description
+python evaluate.py --method rerank --profile description
 ```
 
-`development_cases.json` contains the three exact example queries, 30 judgments
-for the keyword baseline's top 10 results, and three additional relevant candidates
-outside those results. Labels were proposed by the assistant from the supplied
-profiles and are pending human review, not independent ground truth. Review the
-evidence and reason for each case before using the numbers as final quality claims.
+`development_cases.json` contains 64 proposed judgments across three challenge
+queries. The pool includes keyword baseline results, additional relevant examples,
+and profiles inspected during development of the full pipeline. The judgments
+were prepared with assistant help from the supplied profiles and are pending human
+review. Review the evidence and reason for each case before using the numbers as
+final quality claims.
 Set `review_status` to `reviewed_by_user` only after actually reviewing a case.
 
 ## Judgment rules
@@ -62,13 +65,15 @@ Before comparing another model, judge its new results using the same rules.
 
 Poșta Română, Globant, and BAOLILONG GLASS PACKAGING are additional relevant
 examples outside the respective top 10. Their presence demonstrates missed results,
-but three selected examples do not establish dataset-wide recall. No exhaustive
-labeling, held-out evaluation, latency benchmark or model comparison has been done.
+but three selected examples do not establish dataset-wide recall. The final
+development comparison and local batch timings are reported in [WRITEUP.md](../WRITEUP.md).
+The 12-query batch is a coverage check. Held-out relevance and dataset-wide recall
+remain unmeasured.
 
 Records are identified by a SHA-256 of the full normalized profile, not by name:
 two different Rompetrol or Sesame HR records must not share a label accidentally.
-The original dataset hash is checked before evaluation. The ranking algorithm was
-not modified during this evaluation. Keep a separate held-out set for final testing.
+The original dataset hash is checked before evaluation. For independent validation,
+collect reviewed labels for a held-out query set.
 
 
 ## Additional profile inspection (2026-11-20)

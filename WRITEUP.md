@@ -1,259 +1,92 @@
-# Intent Qualification — Writeup
+# Intent Qualification
 
-## Approach
+## 3.1 Approach
 
-The first implemented step is loading and normalizing the dataset.
-`address` and `primary_naics` can be dictionaries or strings representing dictionaries.
-The loader tries JSON parsing for strings, then `ast.literal_eval` for Python
-literal syntax. It does not use `eval`.
+The system separates retrieval from qualification. A fast first pass finds promising profiles, a cross-encoder improves their ordering, and a final evidence check decides which profiles to return. This lets each stage address a different part of the request.
 
-Exact duplicates are detected before normalization by comparing all original
-fields with sorted dictionary keys. The first occurrence is kept, and companies
-are not merged by name. Original record order is preserved.
+1. **Normalize the dataset.** Keep the first copy of each exact duplicate and preserve profile order. The supplied 477 records become 457 profiles. Normalize object fields such as `address` and `primary_naics` where the dataset stores serialized dictionaries. Preserve missing values and distinct profiles with the same company name.
+2. **Extract supported constraints.** The English rule parser extracts the country or region, public status, employee count, USD revenue and founding year where it recognizes those conditions. It keeps the remaining activity text for search. Location checks use the country code in the primary address. For this project, Scandinavia means Denmark, Norway and Sweden. Regional groups are defined in `query_parser.py`.
+3. **Filter and retrieve.** A known contradiction excludes a profile. Missing or invalid values in required fields produce an unknown verdict. Embed the remaining activity and compare it with normalized profile embeddings using cosine similarity. The default representation is the profile description. The system caches embeddings using the input text and encoder configuration, then reuses them across searches.
+4. **Rerank the shortlist.** The local `cross-encoder/ms-marco-MiniLM-L6-v2` jointly reads the remaining activity and each shortlisted profile. It sees the description, offerings, business model and target markets. By default, it scores up to 100 profiles that pass structured constraints and up to 100 in the unknown group, if available. Reranker scores determine order within the candidate groups.
+5. **Qualify on profile evidence.** Rules in `role_checks.py` and `intent_roles.py` check roles such as service provider, manufacturer and supplier, as well as query-specific requirements such as a stated platform or competition with banks. A cosmetics buyer and a packaging supplier play different roles. Likewise, a company using shipping internally does not automatically offer logistics to customers. Profiles with unknown required structured fields remain outside the qualified list. The final top limit is applied after qualification.
 
-Null values stay `None`; missing `address` or `primary_naics` fields become `None`.
-Other fields are preserved as supplied, without filling in unknown values.
-The original JSONL file is never modified.
+The parser and the role checks cover specific intent patterns and combinations. Their wording coverage is bounded. The pipeline can process an arbitrary input string, but support for its requirements depends on the parser and qualifiers. Evaluation labels and company names are outside the runtime rules.
 
-Invalid records stop loading with a line number instead of being silently skipped.
-This step does not validate every nested field or standardize country codes.
+## 3.2 Tradeoffs
 
-## Tradeoffs
+- **Speed and cost.** Structured checks and cached embeddings narrow the work for the more expensive cross-encoder. The default path makes zero paid API calls per query and a batch reuses the model instances. There is still a local compute cost and a one-time model download. I did not benchmark a per-company LLM implementation, so the speedup against it is unknown.
+- **Precision and coverage.** The evidence checks reduce intuitive false matches, such as a firm merely mentioning a target industry. Strict wording and required fields can also remove good matches. A conservative verdict makes those cases reviewable and leaves the qualified list shorter when evidence runs out.
+- **Simplicity and flexibility.** Explicit constraints and profile excerpts make decisions traceable. They require maintenance when wording or sectors change. Description embeddings are compact and consistent, but the initial shortlist can miss a service that appears only in the offerings. The fuller representation is available for comparison.
+- **Scope of evidence.** The system evaluates what the profiles support. It cannot verify a commercial relationship, supplier capacity, availability, or a fact missing from the provided data. For cosmetics packaging, direct-to-consumer describes the buyer and a match indicates potential supply fit.
 
-An optional `filters` method applies a bounded English rule parser, followed by
-three-state structured checks and keyword ranking of residual text. Supported
-fields are primary country (including configured region groups), public status,
-employee count, USD revenue, and founding year. Filters apply
-before top-result truncation. Missing or invalid field values are unknown;
-known contradictions exclude a candidate even when another condition is unknown.
-Unknown candidates remain in a separate result group. Passing these checks is
-not a full relevance decision. The rule-based methods require no external models or API calls.
+### Development comparison
 
-The parser is intentionally limited to documented patterns. It defers some
-negated/relational requests and retains residual text, but cannot guarantee that
-every unsupported condition is detected. Incorrect extraction remains a risk.
+Both methods used description embeddings and returned up to 10 results on the same three development requests. The table counts results labeled relevant among the returned items.
 
-The keyword baseline combines description, core offerings, and business model.
-It splits text into lowercase alphanumeric words and scores a company by the
-number of distinct query words present. Repetition does not increase the score.
-Only positive scores are returned; ties preserve dataset order.
-This provides a transparent baseline without external dependencies, but cannot
-distinguish an offered service from a passing mention of an industry.
+| Request | Semantic only | Full pipeline |
+|---|---:|---:|
+| Logistics in Romania | 1 of 10 | 2 of 2 |
+| Public software companies with more than 1,000 employees | 2 of 10 | 10 of 10 |
+| Suppliers of cosmetics packaging | 8 of 10 | 10 of 10 |
 
-## Evaluation
+The 64 labels were proposed with assistant help using profile evidence and are pending human review. The semantic results included one unjudged logistics profile, six unjudged software profiles and two unjudged packaging profiles. Three logistics results also had insufficient evidence for a decisive label. The counts describe this development comparison. Independent precision, dataset-wide recall and robustness on unseen requests require additional judgments.
 
-A first development evaluation covers three exact challenge examples and their
-top 10 keyword results, plus one additional relevant candidate per query.
-The 33 labels are assistant-proposed, based on supplied profile evidence, and
-pending human review. They are not independent ground truth or a held-out test.
+### Results for the 12 provided queries
 
-Run `python evaluate.py`. See `evaluation/README.md` for judgment rules and
-`evaluation/development_cases.json` for evidence, reasons, and record identifiers.
-Confirmed relevant results in the top 10 are 0 for Romanian logistics, 0 for
-public software companies with >1000 employees, and 6 for cosmetics packaging.
-There are respectively 3, 0, and 1 uncertain judgments; confirmed-relevant@10
-is a lower bound where uncertainty remains. Dataset-wide recall is not measured.
-The keyword algorithm was left unchanged to preserve this baseline.
+The numbers below are output counts from the default pipeline, with `--top 10`. They measure coverage of this run. Relevance outside the three development requests was not measured against reviewed labels.
 
-## Error Analysis
+| Request | Qualified results returned |
+|---|---:|
+| Logistics companies in Romania | 2 |
+| Public software companies with more than 1,000 employees | 10 |
+| Food and beverage manufacturers in France | 10 |
+| Packaging suppliers for a direct-to-consumer cosmetics brand | 10 |
+| US construction companies with revenue over USD 50 million | 10 |
+| Pharmaceutical companies in Switzerland | 10 |
+| European B2B SaaS companies providing HR solutions | 10 |
+| Clean energy startups founded after 2018 with fewer than 200 employees | 0 |
+| Fast-growing fintech companies competing with traditional banks in Europe | 0 |
+| Ecommerce companies using Shopify or a similar platform | 0 |
+| Renewable energy equipment manufacturers in Scandinavia | 10 |
+| Manufacturers or suppliers of critical components for EV battery production | 10 |
 
-Initially, filters alone returned no candidates for q1 because `logistic` did
-not match `logistics`, even though 26 profiles passed the country check.
-The filtered method now applies a small explicit variant map to both query and
-profile words. It returns 10 candidates for q1, including Poșta Română (labeled
-relevant), but also Rompetrol and CBRE (labeled not relevant). Five results are
-unjudged and two uncertain. This fixes the lexical mismatch, not role qualification.
-The map also covers selected singular/plural pairs such as supplier/suppliers
-and battery/batteries. It does not remove suffixes indiscriminately, recognize
-arbitrary synonyms, or double-count variants of one term. The keyword baseline
-retains exact matching. In q3, Minh Trang Packaging is a new unjudged result;
-six results retain relevant labels, two not-relevant and one uncertain.
-For q2, 36 profiles pass public/employee checks; every returned candidate meets
-these structured conditions, but its software role still needs review. Of the
-top 10, only Globant has an existing relevant judgment; the other nine are
-unjudged, so a quality improvement cannot yet be quantified from those labels.
-The original keyword baseline and evaluation labels remain unchanged.
+On one local CPU batch run over 457 profiles with a populated embedding cache, model and index initialization took **7.5 seconds**, followed by **12.8 seconds** of total query processing across the 12 requests. These timings exclude first-time downloads and vary by hardware and candidate count. All 58 automated tests passed. The tests check code behavior, including filters and missing-data handling. Relevance was assessed separately in the development comparison above.
 
-The exact query `Logistic companies in Romania` also exposes a word-inflection
-failure (`logistic` versus `logistics`) and matches on common words such as `in`.
-For the public software query, all top 10 profiles have `is_public=false`.
-For cosmetics packaging, Rantum Capital and BrandSafway appear despite unrelated
-business roles. These results motivate explicit constraints and role qualification.
+## 3.3 Error analysis
 
-In a manual check of `logistics`, CBRE Romania is returned because its profile
-mentions logistics as a client sector/property type. The description identifies
-it as a commercial real estate service provider. Keyword overlap alone therefore
-does not establish that the company offers logistics services.
+**Plausible matches the final pipeline missed.**
 
-## Scaling
+- **Lemartec** passed the US and revenue filters. Its description identifies it as a general contractor and its offerings include industrial and commercial construction. The final rule left it uncertain because the description did not match its construction execution pattern. This is a strong likely false negative on the supplied evidence. The rule should recognize contracting and explicit construction offerings together.
+- **IguanaHR** describes a subscription HR software platform used by businesses. It reached the review list because the HR provider rule missed that phrasing. Review of this profile suggests a likely false negative. More provider patterns and a test covering this case would improve coverage.
 
-To be documented after implementing the initial pipeline.
+**Why three qualified lists are empty.**
 
-## Failure Modes
+| Request | Candidate and missing evidence |
+|---|---|
+| Clean energy startups | **Norhybrid Renewables** passes the numeric filters with a 2020 founding year and 10 employees, and the profile supports the clean energy role. The startup rule demands explicit evidence of startup status. A young, small company can be a useful lead under a broader interpretation. |
+| Fast-growing fintech competitors to banks | **European Pay** offers digital payments and collaborates with banks. The profile does not establish rapid growth or direct competition with traditional banks. The rule requires evidence of both. |
+| Ecommerce using Shopify or similar platforms | **EasyKassa** offers ecommerce and payment technology. Its profile does not establish that it operates a store using Shopify or another supported platform. A company selling ecommerce technology plays a different role from a merchant using it. |
 
-Keyword matching does not handle synonyms, word inflections, phrase meaning,
-negation, or structured constraints such as country and employee count.
-Common query words are not removed. Single-word queries give every matching
-company the same score, so their order is not a semantic relevance ranking.
-No keyword matches means no lexical overlap, not proof that no company qualifies.
+In these examples the pipeline abstains on the evidence it retrieved and checked. A relevant firm could still exist outside the shortlist or have an incomplete profile. All 12 requests execute, while the three empty lists remain a coverage gap against the goal of producing qualified companies for every query.
 
+## 3.4 Scaling to 100,000 companies
 
-## Local embedding retrieval
+The current implementation scans the profiles for structured checks and computes exact similarity over eligible vectors. Caching avoids re-encoding a company's text on every request. The cross-encoder work is bounded by the shortlist and run in batches. The Python and JSON representation of embeddings, full scan, and sorting of scored candidates would become bottlenecks as the dataset grows.
 
-Added `semantic` (full-query similarity baseline) and `hybrid` (existing hard
-filters plus residual-text similarity). The local all-MiniLM-L6-v2 encoder produces
-normalized vectors; their dot product is cosine similarity. Core offerings precede
-description, business model and target markets in profile text. Model truncation
-may omit later evidence. An embedding score is not a qualification verdict.
+1. **Move work offline.** Normalize and validate profiles during ingestion, store structured fields in indexed columns, and encode new or changed profiles in batches. Version the index by model and text representation so old and new embeddings do not mix.
+2. **Use an efficient retrieval path.** At 100,000 profiles, start with a compact float32 embedding matrix and vectorized exact similarity on the filtered subset. Use partial top-k selection to avoid sorting every score. If latency or memory requires an approximate nearest-neighbor index, measure recall on labeled queries and use metadata-aware retrieval or partitioning for selective filters.
+3. **Keep qualification bounded.** Rerank only the shortlist, reuse models in a long-lived process, and choose shortlist sizes based on measured recall and latency. For millions of companies, consider partitioned vector search and batched reranker workers. Test p50 and p95 latency, memory usage and candidate recall before choosing an index or increasing the budget.
 
-The index is cached by ordered texts and encoder configuration/revision. It is
-reused across queries; changing its identity rebuilds the full index. The first
-implementation uses Python vectors and a linear scan, appropriate to 457 profiles.
-At 100,000 profiles, use compact float32 arrays, vectorized scoring or an ANN index,
-filter-aware retrieval, and per-record incremental embedding updates. Benchmark
-retrieval recall before adopting approximate search. Cold model startup and index
-creation must be measured separately from warm query latency.
+These changes are proposed. The 100,000-company and million-company configurations have not been benchmarked.
 
-Automated tests use an injected deterministic test encoder to verify cache reuse,
-cache invalidation, corruption recovery, ranking and filter/unknown separation.
-Those tests verify software behavior, not model quality. Semantic accuracy must be
-measured with the real model and reviewed labels; no automatic relabeling is done.
+## 3.5 Failure modes and monitoring
 
+| Failure mode | What to monitor |
+|---|---|
+| The parser misses a constraint or assigns it to the wrong field, such as treating an operating market as a headquarters location. | Extraction accuracy on reviewed queries, rates of unsupported wording, and the number of results violating sampled constraints. |
+| A profile mentions an industry, customer, subsidiary or internal operation and the rule attributes the activity to the parent company. | Manually audited role precision and excerpts, grouped by intent and sector. |
+| A stale or inaccurate profile reports a wrong employee count, listing status or product offering. | Missingness, data freshness, and contradictions across structured fields and text. |
+| The shortlisting step misses relevant profiles because of description wording, truncation or a restrictive budget. | Candidate recall at the shortlist limit on a reviewed pool, judged misses and differences between description and full profile retrieval. |
+| Rule changes or dataset drift increase the number of profiles marked uncertain or create apparently well-supported false positives. | Qualified coverage, empty-list rates, review outcomes, false positives and false negatives by query family, plus model startup and per-stage latency. |
 
-Validation status for this implementation: 22 automated tests passed, including
-six tests using a deterministic fake encoder. The real embedding model has not
-been run here. Dependency installation into the user Python directory failed
-with Windows access denied; a temporary-target installation stopped reporting
-progress and was interrupted. Therefore no semantic quality or latency results
-are claimed yet. Complete installation and run both semantic and hybrid evaluation
-before drawing conclusions or treating this as a validated submission.
-
-
-## Profile ablation and selective qualification
-
-Added explicit full/description representation selection with separate embedding
-cache identities. Full remains the baseline; description-only can lose offering
-evidence and excludes profiles without descriptions. Compare both on identical
-queries before selecting a default. The supplied real-model rankings exposed
-retailers and companies using logistics internally among logistics results.
-
-Optional qualification sends only the passing hybrid shortlist to an API model,
-using the original query and full profiles. Its three-state verdict, explanation
-and exact evidence excerpts distinguish business roles. Excerpts must occur in
-the profile; that check cannot validate the interpretation or source accuracy.
-Labels in the development set remain independent from generated verdicts.
-Reports expose profiles for human review, decisive-label coverage and unjudged
-counts. Current labels remain assistant-proposed, not verified ground truth.
-
-Tradeoffs: one request per uncached candidate is simple but sequential and may be
-slow. The shortlist caps cost but limits recall. Cache identity covers query,
-profile, prompt, schema and model name; mutable model aliases can still change.
-Unsupported filters may survive retrieval, so the qualifier must inspect all
-constraints. Missing evidence is unknown rather than assumed false. Monitor
-acceptance/unknown rates, retrieval recall on reviewed samples, invalid evidence,
-API failures, latency and cache hit rates before production. At scale, batch or
-bound concurrency for shortlist calls and use indexed candidate retrieval.
-
-Validation of this increment: 26 offline tests pass, including evidence rejection,
-qualification cache invalidation, unknown separation and description-mode isolation.
-Live API qualification has not been tested with credentials. Real-model evaluation
-in this tool environment was blocked by missing socksio for its configured proxy;
-no measured accuracy improvement is claimed. The user's earlier local runs worked.
-
-
-## Local reranking alternative
-
-The `rerank` method requires no paid API: bounded hybrid retrieval feeds a local
-MS MARCO MiniLM cross-encoder. Unlike independently computed embeddings, it scores
-each query/profile pair jointly. Description-first text prioritizes main activity;
-512-token truncation can still omit evidence. It is a general passage relevance
-model, not a model trained on these company labels. Missing facts and complex
-business roles remain potential failures. No uncalibrated score is presented as a
-probability or definitive verdict. Unknown filter groups remain separate.
-
-Default shortlist size is 100 per group. This covers all 26 Romanian candidates
-and all 36 candidates passing the public/employee filters in the current dataset.
-Unconstrained queries still depend on retrieval recall. At scale, use indexed
-retrieval, measure recall, and bound reranking cost. API qualification remains an
-optional separate experiment; it is not used by the local rerank method.
-
-Thirty automated tests pass, including reranking order, preservation of unknown
-filter status, invalid score rejection and filter-only queries. These software
-tests use deterministic doubles and do not establish model accuracy.
-
-
-Real-model validation of local reranking completed on the 457 normalized profiles
-with description retrieval and 100 candidates. The report is saved locally at
-outputs/rerank-description.json. For q1, Brasov Industrial Portfolio ranked first
-and Posta Romana tenth; Dacia and Sincron HR dropped out of the top ten. CBRE
-Romania remains a known negative, so the role distinction is not solved. For q2,
-Globant ranked first and EPAM second; Bachem and Siegfried left the top ten. For
-q3, five returned companies have proposed relevant labels and five are unjudged.
-The proposed-label relevant@10 lower bounds are 0.10, 0.10 and 0.50 respectively;
-these are not reviewed precision estimates or proof of general accuracy gains.
-The test process used a temporary workspace copy of socksio for its SOCKS proxy;
-no Python environment or system settings were modified.
-
-
-## Conservative local role selection (2026-11-20)
-
-Reranking alone still put property and equipment providers among logistics firms.
-The local pipeline now checks explicit role evidence across the ranked shortlist
-before limiting the accepted list. It does not fill vacant top-ten slots. Simple
-logistics activity, software provision (including engineering services), and the
-cosmetics-packaging development intent have bounded rules. Description evidence is
-required; ambiguous infrastructure/facility leasing and secondary service claims
-are separated for review. Unknown structured conditions cannot become accepted.
-Extra unsupported residual constraints cannot be silently discarded by these
-rules: they abstain. They are not a general solution to the twelve challenge
-queries; new role families and independent evaluation remain necessary.
-
-Logistic/logistics normalize identically in the parser. Runtime rules contain no
-company names or dataset IDs and never load the development labels. Evaluation
-labels were separately extended through assistant profile inspection: all 26
-Romanian profiles have proposed judgments (2 relevant, 9 insufficient, 15 negative),
-as do the prior software and packaging top tens. Human review remains outstanding.
-The definition includes explicit external postal/parcel/cargo-handling services;
-software includes development services; packaging means potential supply, not a
-verified contract fit. Altering these definitions may alter the judgments.
-
-Real-model evaluation with description retrieval and 100 candidates now returns
-Posta Romana and Portul Constanta for q1; q2 returns ten proposed-relevant software
-providers beginning Globant, EPAM and Tata Consultancy Services; q3 returns ten
-proposed-relevant packaging suppliers. The proposed-label relevant@10 values are
-0.20, 1.00 and 1.00. These are DEVELOPMENT results with assistant-proposed labels,
-not independent accuracy. Some score increases reflect labeling previously
-unjudged candidates, not better ranking. Conservative rules can lose true matches,
-especially unseen phrasing and secondary activities. No minimum logit cutoff is
-claimed to be calibrated. `--rank-only` retains the original ranking experiment.
-
-Validation: 39 tests passed; real-model evaluation completed for all three queries;
-a separate real-model check confirmed identical accepted company lists AND scores
-for Logistic and Logistics. The review report is outputs/rerank-qualified.json.
-
-
-## Extended filters: revenue, founding year and geographic groups
-
-Added explicit USD revenue comparisons with magnitude suffixes, four-digit founding
-year comparisons, and country-set membership for Europe/Scandinavia/Nordic countries.
-The parser retains unsupported currency/constraint wording instead of inventing
-values. No conversions or missing-value imputations are made. Boolean values and
-nonfinite numeric data are unknown; invalid filter definitions fail fast. Conditions
-combine with AND, and a known failure dominates unknown. Year/employee boundaries
-are strict or inclusive according to the operator, with dedicated regression tests.
-
-Region membership is a documented project convention: primary address only, Europe
-includes transcontinental Russia/Turkey and Cyprus, and Scandinavia excludes Finland
-and Iceland. It is not an EU filter or a guarantee about a company's operating reach.
-Unsupported country names and territories remain a limitation.
-
-On the real dataset, US + revenue >50m yields 49 passes, 6 unknown and 402 failures;
-year >2018 + employees <200 yields 82 passes, 141 unknown and 234 failures; Europe
-matches 286 primary addresses and Scandinavia 64. These are structured-filter counts,
-not counts of relevant construction, clean-energy, HR SaaS or equipment companies.
-Role coverage is unchanged. This distinction prevents reporting numeric/location
-filter success as intent qualification. Forty-eight automated tests pass.
-
-Real-model regression after the extension preserved the three development result
-lists: 2 logistics results, 10 software results and 10 packaging results. The
-report is outputs/extended-filter-regression.json; labels are still proposed.
+The first improvement would be a manually reviewed, held-out set spanning all intent families, including candidates near the acceptance boundary and plausible misses below the shortlist. With that in place, I would test changes to the provider and startup rules, then compare them with selective model-based qualification on the difficult cases. That evaluation would let me measure the coverage gained and the additional errors introduced.
