@@ -27,6 +27,9 @@ def parse_query(query):
         raise ValueError("Query cannot be empty")
     conditions = []
     warnings = []
+    # These two alternatives define one provider/platform class, not Boolean geography.
+    text = re.sub(r"\bmanufacture or supply\b", "supply", text)
+    text = re.sub(r"\bshopify or similar platforms\b", "shopify-like platforms", text)
     if re.search(r"\b(clients|customers|serving|operating|whose|that have)\b", text):
         return {"activity": text, "filters": [], "warnings": [
             "Relationship or operating-location wording is outside this parser's supported grammar; no filters applied."

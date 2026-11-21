@@ -8,9 +8,8 @@ from collections import Counter
 from pathlib import Path
 
 from data_loader import DEFAULT_DATASET_PATH, load_companies
-from keyword_search import search_companies
-from filtered_search import search_with_filters
-from qualification import Qualifier, add_options, check_options
+from pipeline import SearchPipeline
+from qualification import add_options, check_options
 
 
 def company_id(company):
@@ -33,19 +32,10 @@ def main():
         raise ValueError("Dataset changed; review the evaluation cases before comparing results.")
 
     companies = load_companies()
-    engine = None
-    qualifier = None
-    if args.method in ("semantic", "hybrid", "rerank"):
-        from semantic_search import SemanticSearch
-        try:
-            qualifier = Qualifier() if args.qualify else None
-            engine = SemanticSearch(companies, profile_mode=args.profile)
-            reranker = None
-            if args.method == "rerank":
-                from reranker import LocalReranker
-                reranker = LocalReranker()
-        except (RuntimeError, OSError, ValueError) as error:
-            parser.exit(1, f"Semantic search error: {error}\n")
+    try:
+        engine = SearchPipeline(companies, args.method, args.profile, args.candidates, args.rank_only, args.qualify)
+    except (RuntimeError, OSError, ValueError) as error:
+        parser.exit(1, f"Search initialization error: {error}\n")
     labels = {}
     valid_labels = {"relevant", "not_relevant", "insufficient_information"}
     known_ids = {company_id(company) for company in companies}
@@ -58,28 +48,15 @@ def main():
     print("Development evaluation: assistant-proposed labels, pending human review.")
     print("Confirmed relevant / 10 is a lower bound when judgments are uncertain or missing.")
     report = {"method": args.method, "profile": args.profile, "qualified": args.qualify or (args.method == "rerank" and not args.rank_only), "candidates": args.candidates,
-              "label_status": "assistant-proposed, pending human review", "queries": []}
+              "label_status": "assistant-proposed, pending human review",
+              "model_index_load_seconds": engine.load_seconds, "configuration": engine.metadata, "queries": []}
     for query in evaluation["queries"]:
-        if args.method != "keyword":
-            output = (engine.search(query["text"], top=args.candidates if qualifier or args.method == "rerank" else 10, hybrid=args.method in ("hybrid", "rerank"))
-                      if engine is not None else search_with_filters(companies, query["text"], top=10))
-            if args.method == "rerank":
-                output = reranker.apply(output, query["text"], args.candidates)
-                if not args.rank_only:
-                    from role_checks import apply_role_checks
-                    output = apply_role_checks(output, 10)
-                else:
-                    output["results"] = output["results"][:10]
-                    output["uncertain_results"] = output["uncertain_results"][:10]
-            if qualifier:
-                try:
-                    output = qualifier.apply(output, query["text"], 10)
-                except (RuntimeError, OSError) as error:
-                    parser.exit(1, f"Qualification error: {error}\n")
-            results = output["results"]
-            print(f"\nStructured filter counts: {output['counts']}; unknown candidates excluded from passing list")
-        else:
-            results = search_companies(companies, query["text"], top=10)
+        try:
+            output = engine.search(query["text"], 10)
+        except (RuntimeError, OSError, ValueError) as error:
+            parser.exit(1, f"Search error: {error}\n")
+        results = output["results"]
+        print(f"\nStructured filter counts: {output['counts']}; unknown candidates excluded from passing list")
         counts = Counter(labels.get((query["id"], company_id(r["company"])), "unjudged") for r in results)
         print(f"\n{query['id']}: {query['text']}")
         print(f"Returned: {len(results)}; relevant: {counts['relevant']}; "
@@ -91,7 +68,7 @@ def main():
             print(f"Proposed-label precision among returned: {counts['relevant'] / len(results):.2f} (development only)")
         judged = counts['relevant'] + counts['not_relevant']
         print(f"Decisive label coverage: {judged}/{len(results)} returned; proposed labels still need review")
-        report["queries"].append({"query": query, "counts": dict(counts),
+        report["queries"].append({"query": query, "counts": dict(counts), "timings_seconds": output["timings_seconds"],
             "qualification_counts": output.get("qualification_counts") if args.method != "keyword" else None,
             "review_candidates": output.get("review_candidates", []) if args.method != "keyword" else [],
             "results": [dict(r, company_id=company_id(r["company"]),

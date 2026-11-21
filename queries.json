@@ -1,0 +1,14 @@
+[
+  {"id": "logistics_ro", "text": "Logistic companies in Romania"},
+  {"id": "public_software", "text": "Public software companies with more than 1,000 employees."},
+  {"id": "food_fr", "text": "Food and beverage manufacturers in France"},
+  {"id": "cosmetics_packaging", "text": "Companies that could supply packaging materials for a direct-to-consumer cosmetics brand"},
+  {"id": "construction_us", "text": "Construction companies in the United States with revenue over $50 million"},
+  {"id": "pharma_ch", "text": "Pharmaceutical companies in Switzerland"},
+  {"id": "hr_saas_europe", "text": "B2B SaaS companies providing HR solutions in Europe"},
+  {"id": "clean_startups", "text": "Clean energy startups founded after 2018 with fewer than 200 employees"},
+  {"id": "fintech_growth", "text": "Fast-growing fintech companies competing with traditional banks in Europe."},
+  {"id": "ecommerce_platform", "text": "E-commerce companies using Shopify or similar platforms"},
+  {"id": "renewable_equipment", "text": "Renewable energy equipment manufacturers in Scandinavia"},
+  {"id": "ev_components", "text": "Companies that manufacture or supply critical components for electric vehicle battery production"}
+]

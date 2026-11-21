@@ -1,4 +1,5 @@
-# Only needed for semantic/hybrid search; keyword/filters use the standard library.
-sentence-transformers>=3.0,<6
+# Tested versions for semantic/hybrid/rerank; keyword/filters need only Python.
+sentence-transformers==5.7.0
+transformers==5.23.0
 # Required when model downloads use a SOCKS proxy.
 socksio>=1.0,<2

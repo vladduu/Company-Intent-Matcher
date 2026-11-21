@@ -12,6 +12,12 @@ def verdict(label, reason, evidence=()):
 def role_check(company, activity):
     """Only explicitly supported residual intents can receive a positive verdict."""
     activity = " ".join(activity.casefold().strip(" .?!").split())
+    if re.fullmatch(r"software (?:development|engineering|providers|developers)", activity):
+        activity = "software"
+    if re.fullmatch(r"(?:logistics (?:providers|service providers)|providers of logistics services)", activity):
+        activity = "logistics"
+    if re.fullmatch(r"(?:cosmetics? packaging suppliers|packaging suppliers for cosmetics? brands)", activity):
+        activity = "supply packaging materials for a cosmetics brand"
     if not activity:
         return verdict("relevant", "All extracted structured conditions passed; no residual activity.")
     description = company.get("description")
@@ -66,6 +72,10 @@ def role_check(company, activity):
         if has_market and has_product and provides and product_offer and not re.search(r"\b(?:does not|doesn't|no longer)\b", text):
             return verdict("relevant", "Profile establishes packaging products supplied to cosmetics/personal-care markets; commercial suitability still needs validation.", [description, product_offer[0]])
         return unknown
+    from intent_roles import check_extended_role
+    extended = check_extended_role(company, activity)
+    if extended is not None:
+        return extended
     return verdict("insufficient_information", "Residual intent is outside the local role rules; ranked candidate requires review.", [description])
 
 

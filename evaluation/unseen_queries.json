@@ -1,0 +1,10 @@
+[
+  {"id": "postal_variant", "text": "Providers of logistics services in Romania"},
+  {"id": "food_variant", "text": "Beverage producers in France"},
+  {"id": "software_variant", "text": "Public software development companies with at least 1001 employees"},
+  {"id": "construction_boundary", "text": "Construction companies in the United States with revenue at least $50 million"},
+  {"id": "hr_variant", "text": "Business-to-business software-as-a-service companies providing human resources solutions in Europe"},
+  {"id": "equipment_variant", "text": "Green energy hardware manufacturers in Scandinavia"},
+  {"id": "unsupported_certification", "text": "Pharmaceutical companies certified by FDA in Switzerland"},
+  {"id": "negation", "text": "Construction companies without government contracts in the United States"}
+]
