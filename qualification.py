@@ -111,22 +111,3 @@ class Qualifier:
                     rejected_results=rejected, qualification_counts={
                         "relevant": len(accepted), "not_relevant": len(rejected),
                         "insufficient_information": len(uncertain)})
-
-
-def add_options(parser):
-    parser.add_argument("--rank-only", action="store_true", help="With rerank, skip local role checks for baseline comparison")
-    parser.add_argument("--profile", choices=("full", "description"), default="full",
-                        help="Embedding text representation; full preserves the baseline")
-    parser.add_argument("--qualify", action="store_true", help="Send hybrid shortlist to OpenAI for qualification")
-    parser.add_argument("--candidates", type=int, default=100, help="Candidates per filter group for reranking (or passing candidates for API qualification)")
-
-
-def check_options(parser, args, top):
-    if args.rank_only and args.method != "rerank":
-        parser.error("--rank-only requires --method rerank")
-    if args.qualify and args.method != "hybrid":
-        parser.error("--qualify requires --method hybrid")
-    if args.candidates < 1 or ((args.qualify or args.method == "rerank") and args.candidates < top):
-        parser.error("--candidates must be positive and at least --top when qualifying")
-    if args.profile != "full" and args.method not in ("semantic", "hybrid", "rerank"):
-        parser.error("--profile applies only to semantic/hybrid retrieval")

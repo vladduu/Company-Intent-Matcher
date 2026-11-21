@@ -9,7 +9,7 @@ from time import perf_counter
 
 from data_loader import DEFAULT_DATASET_PATH, load_companies
 from keyword_search import tokenize
-from qualification import add_options, check_options
+from cli_options import add_options, check_options
 from pipeline import SearchPipeline
 
 
@@ -36,12 +36,9 @@ def main():
     parser.add_argument("--output", type=Path, help="Save all results, evidence and timings as JSON")
     parser.add_argument("--data", type=Path, default=DEFAULT_DATASET_PATH, help="Company JSONL dataset")
     parser.add_argument("--top", type=int, default=10)
-    parser.add_argument("--method", choices=("keyword", "filters", "semantic", "hybrid", "rerank"), default="keyword")
-    add_options(parser)
+    add_options(parser, default_method="rerank")
     args = parser.parse_args()
     check_options(parser, args, args.top)
-    if args.top < 1:
-        parser.error("--top must be positive")
     if args.query is not None and not tokenize(args.query):
         parser.error("--query must contain words or numbers")
     if args.output and not (args.query or args.queries):

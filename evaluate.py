@@ -9,7 +9,7 @@ from pathlib import Path
 
 from data_loader import DEFAULT_DATASET_PATH, load_companies
 from pipeline import SearchPipeline
-from qualification import add_options, check_options
+from cli_options import add_options, check_options
 
 
 def company_id(company):
@@ -20,8 +20,7 @@ def company_id(company):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Evaluate one search method on development queries")
-    parser.add_argument("--method", choices=("keyword", "filters", "semantic", "hybrid", "rerank"), default="keyword")
-    add_options(parser)
+    add_options(parser, default_method="keyword")
     parser.add_argument("--output", type=Path, help="Save results and profiles for manual review")
     args = parser.parse_args()
     check_options(parser, args, 10)
