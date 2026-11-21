@@ -22,7 +22,8 @@ This step does not validate every nested field or standardize country codes.
 
 An optional `filters` method applies a bounded English rule parser, followed by
 three-state structured checks and keyword ranking of residual text. Supported
-fields are primary country, public status, and employee count. Filters apply
+fields are primary country (including configured region groups), public status,
+employee count, USD revenue, and founding year. Filters apply
 before top-result truncation. Missing or invalid field values are unknown;
 known contradictions exclude a candidate even when another condition is unknown.
 Unknown candidates remain in a separate result group. Passing these checks is
@@ -229,3 +230,30 @@ claimed to be calibrated. `--rank-only` retains the original ranking experiment.
 Validation: 39 tests passed; real-model evaluation completed for all three queries;
 a separate real-model check confirmed identical accepted company lists AND scores
 for Logistic and Logistics. The review report is outputs/rerank-qualified.json.
+
+
+## Extended filters: revenue, founding year and geographic groups
+
+Added explicit USD revenue comparisons with magnitude suffixes, four-digit founding
+year comparisons, and country-set membership for Europe/Scandinavia/Nordic countries.
+The parser retains unsupported currency/constraint wording instead of inventing
+values. No conversions or missing-value imputations are made. Boolean values and
+nonfinite numeric data are unknown; invalid filter definitions fail fast. Conditions
+combine with AND, and a known failure dominates unknown. Year/employee boundaries
+are strict or inclusive according to the operator, with dedicated regression tests.
+
+Region membership is a documented project convention: primary address only, Europe
+includes transcontinental Russia/Turkey and Cyprus, and Scandinavia excludes Finland
+and Iceland. It is not an EU filter or a guarantee about a company's operating reach.
+Unsupported country names and territories remain a limitation.
+
+On the real dataset, US + revenue >50m yields 49 passes, 6 unknown and 402 failures;
+year >2018 + employees <200 yields 82 passes, 141 unknown and 234 failures; Europe
+matches 286 primary addresses and Scandinavia 64. These are structured-filter counts,
+not counts of relevant construction, clean-energy, HR SaaS or equipment companies.
+Role coverage is unchanged. This distinction prevents reporting numeric/location
+filter success as intent qualification. Forty-eight automated tests pass.
+
+Real-model regression after the extension preserved the three development result
+lists: 2 logistics results, 10 software results and 10 packaging results. The
+report is outputs/extended-filter-regression.json; labels are still proposed.

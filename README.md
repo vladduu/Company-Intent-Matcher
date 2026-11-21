@@ -102,8 +102,8 @@ not a comprehensive geography parser. Primary address defines location here.
 Negation, alternatives, ranges and certain relationship phrases are deferred
 without applying filters. Other residual text is retained for keyword search;
 it is not guaranteed to be a correctly extracted activity. Unsupported constraints
-can still be missed by these limited rules. Revenue, founding year, region groups,
-synonyms and complex intent remain future work. No LLM calls or new dependencies
+can still be missed by these limited rules. See the extended filters below for revenue, founding year and region groups.
+General synonyms and complex intent remain limited. No LLM calls or new dependencies
 are required. The parsed query is kept in memory, not saved automatically.
 
 
@@ -139,8 +139,8 @@ sequence limit (normally 256 word pieces). This can lose important evidence.
 Scores are cosine similarity, not probabilities. No relevance threshold has been
 calibrated: the method returns up to `--top` candidates, even when all are weak.
 Passing filters and high similarity do not confirm the requested business role.
-The parser still has its documented limitations. Revenue, year and regional
-constraints are not magically handled by adding embeddings.
+The parser still has its documented limitations. Supported revenue, year and regional constraints are handled explicitly by the
+parser and filters, not by the embeddings.
 
 Model documentation: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
 Semantic search documentation: https://www.sbert.net/examples/sentence_transformer/applications/semantic-search/README.html
@@ -259,3 +259,44 @@ in `review_candidates` and rejected candidates separately. Relevant@10 penalizes
 returning fewer than ten even when the dataset has fewer matches; precision among
 returned results is also printed when all returned labels are decisive. Neither
 metric establishes generalization on these development queries.
+
+
+## Extended structured filters
+
+Revenue is interpreted in USD, matching the dataset. Examples accepted include
+`revenue over $50 million`, `annual revenue at least USD 1.5 billion`, `$50m`,
+`500 thousand dollars`, and `50,000,000 USD`. Unqualified amounts also mean USD.
+Other currencies are left in the residual with a warning; no exchange conversion
+is attempted. Malformed numbers are not partially accepted.
+
+`founded` and `established` support `after` (>), `before` (<), `since` (>=) and
+`in` (==), followed by a four-digit year. Employee comparisons may follow `with`
+or `and`, allowing year/revenue/employee constraints to combine. Missing or invalid
+values produce unknown; a known failed condition still dominates unknown. Year
+values must be integral, in 1..9999; numeric strings are not silently coerced.
+
+`in Europe`, `in Scandinavia` and `in the Nordic countries` produce country-code
+membership filters. They use the primary address, not countries served. Scandinavia
+means Denmark, Norway and Sweden; Nordic countries additionally include Finland and
+Iceland. Europe is a declared project grouping (see REGIONS in query_parser.py),
+including the UK, Switzerland, Russia, Turkey and Cyprus; it is not EU membership.
+The available country code cannot resolve continental parts of countries. Territories
+are not automatically included. These scope choices should be reviewed for production.
+
+```powershell
+python solution.py --method filters --query 'Construction companies in the United States with revenue over $50 million' --top 10
+python solution.py --method filters --query "Clean energy startups founded after 2018 with fewer than 200 employees" --top 10
+```
+
+In PowerShell use single quotes around queries containing `$` to avoid variable
+expansion, for example:
+
+```powershell
+python solution.py --method filters --query 'Construction companies in the United States with revenue over $50 million' --top 10
+```
+
+These filters check the structured conditions only. Local role qualification still
+covers the previously documented roles; construction, clean energy and other new
+roles are not qualified automatically by this increment. `--method rerank --rank-only`
+can inspect ranked candidates without claiming qualification. Negation, ranges and
+customer/operating-location scope continue to be deferred with warnings.
